@@ -5,7 +5,7 @@ date: "2024-10-11"
 ---
 
 ```{r}
-file <- "../assets/Steam.dat"
+file <- "../assets/aadt.txt"
 data <- read.table(file)
 head(data)
 ```
