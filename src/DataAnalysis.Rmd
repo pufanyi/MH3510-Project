@@ -4,8 +4,71 @@ output: html_document
 date: "2024-10-11"
 ---
 
+## Setup and Load Data
+
+```{r}
+library(ggplot2)
+library(GGally)
+```
+
+
+```{r}
+columns <- c("Y", "X1", "X2", "X3", "X4", "X5", "X6", "X7")
+```
+
+
 ```{r}
 file <- "../assets/aadt.txt"
-data <- read.table(file)
+data_raw <- read.table(file, col.names = columns)
+data <- data_raw[, c("Y", "X1", "X2", "X3", "X4")]
 head(data)
 ```
+
+```{r}
+image_folder <- "../assets/images/"
+```
+
+
+## Graphic display of the observed data
+
+```{r}
+pdf(file.path(image_folder, "overview.pdf"), width = 10, height = 10)
+ggpairs(data,
+        upper = list(continuous = wrap("points", color = "blue", alpha = 0.5, size = 2)),
+        lower = list(continuous = wrap("points", color = "red", alpha = 0.5, size = 2)),
+        diag = list(continuous = wrap("densityDiag", fill = "lightblue")))
+dev.off()
+```
+
+## Simple Linear Regression
+
+
+
+## Multiple Linear Regression
+
+```{r}
+mlr_output_folder <- file.path(image_folder, "mlr")
+dir.create(mlr_output_folder, showWarnings = FALSE)
+```
+
+
+```{r}
+mlr <- lm(Y ~ X1 + X2 + X3 + X4, data = data)
+summary(mlr)
+```
+
+
+```{r}
+pdf(file.path(mlr_output_folder, "residuals.pdf"), width = 8, height = 8)
+plot(mlr, which = 1)
+dev.off()
+```
+
+```{r}
+pdf(file.path(mlr_output_folder, "qqplot.pdf"), width = 8, height = 8)
+qqnorm(resid(mlr))
+qqline(resid(mlr), col = "red")
+dev.off()
+```
+
+
