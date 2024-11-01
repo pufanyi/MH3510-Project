@@ -4,9 +4,10 @@ output: html_document
 date: "2024-10-11"
 ---
 
+
 ## Setup and Load Data
 
-```{r}
+```{r warning=FALSE}
 library(ggplot2)
 library(GGally)
 ```
@@ -59,7 +60,8 @@ summary(mlr)
 
 
 ```{r}
-pdf(file.path(mlr_output_folder, "residuals.pdf"), width = 8, height = 8)
+residuals_image_path <- file.path(mlr_output_folder, "residuals.pdf")
+pdf(residuals_image_path, width = 8, height = 8)
 plot(mlr, which = 1)
 dev.off()
 ```
@@ -70,5 +72,3 @@ qqnorm(resid(mlr))
 qqline(resid(mlr), col = "red")
 dev.off()
 ```
-
-
