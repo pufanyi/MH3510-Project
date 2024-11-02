@@ -1,15 +1,47 @@
 ---
 title: "DataAnalysis"
-output: html_document
-date: "2024-10-11"
+author: Pu Fanyi
+date: "`r Sys.Date()`"
+knit: (function(inputFile, encoding) {
+      out_dir <- "../docs";
+      rmarkdown::render(inputFile,
+                        encoding=encoding,
+                        output_dir=file.path(dirname(inputFile), out_dir));})
+output:
+  rmdformats::readthedown:
+    self_contained: false
 ---
 
 
 ## Setup and Load Data
 
-```{r warning=FALSE}
+```{r setup, warning=FALSE, message=FALSE}
 library(ggplot2)
 library(GGally)
+library(tidyr)
+library(reshape2)
+library(gridExtra)
+
+
+draw <- function(drawing_function, file_path, width = 8, height = 8) {
+  # Check if the directory exists
+  dir_path <- dirname(file_path)
+  if (!dir.exists(dir_path)) {
+    stop("Directory does not exist: ", dir_path)
+  }
+  
+  # Try to create the PDF
+  tryCatch({
+    pdf(file_path, width = width, height = height)
+    drawing_function()
+    dev.off()
+  }, error = function(e) {
+    message("Error creating PDF: ", e$message)
+  })
+  
+  # Display the plot
+  drawing_function()
+}
 ```
 
 
@@ -27,6 +59,87 @@ head(data)
 
 ```{r}
 image_folder <- "../assets/images/"
+```
+
+
+## Overview of the data
+
+```{r}
+overview_image_path <- file.path(image_folder, "overview")
+dir.create(overview_image_path, showWarnings = FALSE)
+```
+
+
+```{r, fig.width=10, fig.height=5}
+
+# Create separate plots for each variable
+plot_Y <- ggplot(data, aes(x = Y)) +
+  geom_histogram(aes(y = after_stat(density)), fill = "lightblue", color = "black", bins = 30, alpha = 0.6) +
+  geom_density(color = "red", linewidth = 1) +
+  labs(title = "Distribution of Y") +
+  theme_minimal()
+
+plot_X1 <- ggplot(data, aes(x = X1)) +
+  geom_histogram(aes(y = after_stat(density)), fill = "lightblue", color = "black", bins = 30, alpha = 0.6) +
+  geom_density(color = "red", linewidth = 1) +
+  labs(title = "Distribution of X1") +
+  theme_minimal()
+
+plot_X2 <- ggplot(data, aes(x = X2)) +
+  geom_histogram(aes(y = after_stat(density)), fill = "lightblue", color = "black", bins = 30, alpha = 0.6) +
+  geom_density(color = "red", linewidth = 1) +
+  labs(title = "Distribution of X2") +
+  theme_minimal()
+
+plot_X3 <- ggplot(data, aes(x = X3)) +
+  geom_histogram(aes(y = after_stat(density)), fill = "lightblue", color = "black", bins = 30, alpha = 0.6) +
+  geom_density(color = "red", linewidth = 1) +
+  labs(title = "Distribution of X3") +
+  theme_minimal()
+
+# Arrange histograms in 2x2 grid
+histogram_grid <- grid.arrange(
+  plot_Y, plot_X1, plot_X2, plot_X3,
+  ncol = 2,
+  nrow = 2
+)
+
+# Create pie chart for X4
+x4_counts <- table(data$X4)
+plot_X4 <- ggplot(data.frame(x4_counts), aes(x = "", y = Freq, fill = Var1)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y", start = 0) +
+  labs(
+    title = "Distribution of X4",
+    fill = "Category"
+  ) +
+  scale_fill_manual(
+    values = c("#FF9999", "#66B2FF"),
+    labels = c("yes", "no")
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 14),
+    legend.position = "bottom",
+    legend.title = element_text(),
+    panel.grid = element_blank(),
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+  ) +
+  geom_text(aes(
+    label = paste0(round(100 * Freq/sum(Freq), 1), "%")),
+    position = position_stack(vjust = 0.5)
+  )
+
+# Combine histogram grid and pie chart vertically
+combined_plot <- grid.arrange(
+  histogram_grid,
+  plot_X4,
+  ncol = 2,
+  widths = c(3, 1)
+)
+
+ggsave(combined_plot_image_path, combined_plot, width = 10, height = 5)
 ```
 
 
@@ -60,15 +173,21 @@ summary(mlr)
 
 
 ```{r}
+plot_resid <- function() {
+  plot(mlr, which = 1)
+}
+
 residuals_image_path <- file.path(mlr_output_folder, "residuals.pdf")
-pdf(residuals_image_path, width = 8, height = 8)
-plot(mlr, which = 1)
-dev.off()
+draw(plot_resid, residuals_image_path)
 ```
 
 ```{r}
-pdf(file.path(mlr_output_folder, "qqplot.pdf"), width = 8, height = 8)
-qqnorm(resid(mlr))
-qqline(resid(mlr), col = "red")
-dev.off()
+draw_qqplot <- function() {
+  qqnorm(resid(mlr))
+  qqline(resid(mlr), col = "red")
+}
+
+qqplot_image_path <- file.path(mlr_output_folder, "qqplot.pdf")
+draw(draw_qqplot, qqplot_image_path)
 ```
+
