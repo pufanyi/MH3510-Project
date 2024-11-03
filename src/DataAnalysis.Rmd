@@ -12,7 +12,6 @@ output:
     self_contained: false
 ---
 
-
 ## Setup and Load Data
 
 ```{r setup, warning=FALSE, message=FALSE}
@@ -44,11 +43,9 @@ draw <- function(drawing_function, file_path, width = 8, height = 8) {
 }
 ```
 
-
 ```{r}
 columns <- c("Y", "X1", "X2", "X3", "X4", "X5", "X6", "X7")
 ```
-
 
 ```{r}
 file <- "../assets/aadt.txt"
@@ -61,7 +58,6 @@ head(data)
 image_folder <- "../assets/images/"
 ```
 
-
 ## Overview of the data
 
 ```{r}
@@ -69,8 +65,7 @@ overview_image_path <- file.path(image_folder, "overview")
 dir.create(overview_image_path, showWarnings = FALSE)
 ```
 
-
-```{r, fig.width=10, fig.height=5}
+```{r}
 
 # Create separate plots for each variable
 plot_Y <- ggplot(data, aes(x = Y)) +
@@ -98,12 +93,14 @@ plot_X3 <- ggplot(data, aes(x = X3)) +
   theme_minimal()
 
 # Arrange histograms in 2x2 grid
-histogram_grid <- grid.arrange(
+histogram_grid <- arrangeGrob(
   plot_Y, plot_X1, plot_X2, plot_X3,
   ncol = 2,
   nrow = 2
 )
+```
 
+```{r fig.width=10, fig.height=5}
 # Create pie chart for X4
 x4_counts <- table(data$X4)
 plot_X4 <- ggplot(data.frame(x4_counts), aes(x = "", y = Freq, fill = Var1)) +
@@ -142,7 +139,6 @@ combined_plot <- grid.arrange(
 ggsave(combined_plot_image_path, combined_plot, width = 10, height = 5)
 ```
 
-
 ## Graphic display of the observed data
 
 ```{r}
@@ -154,8 +150,76 @@ ggpairs(data,
 dev.off()
 ```
 
-## Simple Linear Regression
+We let $y' = \log y$ to fix the skewness of the data.
 
+```{r}
+y_prime <- log(data$Y)
+fig <- ggplot(data.frame(y_prime), aes(x = y_prime)) +
+  geom_histogram(aes(y = after_stat(density)), fill = "lightblue", color = "black", bins = 30, alpha = 0.6) +
+  geom_density(color = "red", linewidth = 1) +
+  labs(title = "Distribution of log(y)", x = "y'") +
+  theme_minimal()
+
+fig
+
+ggsave(file.path(overview_image_path, "log_Y.pdf"), fig, width = 5, height = 3)
+```
+
+Finally, we replace the original $y$ with $y'$.
+
+```{r}
+data$Y <- y_prime
+```
+
+
+## Single Variable Analysis
+
+```{r}
+slr_output_folder <- file.path(image_folder, "slr")
+dir.create(slr_output_folder, showWarnings = FALSE)
+```
+
+### X1
+
+```{r}
+X1_output_folder <- file.path(slr_output_folder, "X1")
+dir.create(X1_output_folder, showWarnings = FALSE)
+```
+
+
+```{r}
+# scatter plot
+scatter_plot_path <- file.path(X1_output_folder, "scatter_plot.pdf")
+scatter_plot_X1 <- ggplot(data, aes(x = X1, y = Y)) +
+  geom_point(color = "blue") +
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  labs(title = "Scatter Plot of Y vs. X1") +
+  theme_minimal()
+ggsave(scatter_plot_path, scatter_plot_X1, width = 8, height = 6)
+```
+
+```{r}
+slr_X1 <- lm(Y ~ X1, data = data)
+summary(slr_X1)
+```
+
+
+
+```{r}
+plot_resid_X1 <- function() {
+  plot(slr_X1, which = 1)
+}
+
+residuals_image_path_X1 <- file.path(X1_output_folder, "residuals.pdf")
+draw(plot_resid_X1, residuals_image_path_X1)
+```
+
+## Single Variable Analysis
+
+```{r}
+slr_output_folder <- file.path(image_folder, "slr")
+dir.create(slr_output_folder, showWarnings = FALSE)
+```
 
 
 ## Multiple Linear Regression
@@ -165,12 +229,10 @@ mlr_output_folder <- file.path(image_folder, "mlr")
 dir.create(mlr_output_folder, showWarnings = FALSE)
 ```
 
-
 ```{r}
 mlr <- lm(Y ~ X1 + X2 + X3 + X4, data = data)
 summary(mlr)
 ```
-
 
 ```{r}
 plot_resid <- function() {
@@ -190,4 +252,3 @@ draw_qqplot <- function() {
 qqplot_image_path <- file.path(mlr_output_folder, "qqplot.pdf")
 draw(draw_qqplot, qqplot_image_path)
 ```
-
