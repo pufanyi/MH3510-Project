@@ -19,7 +19,10 @@ library(ggplot2)
 library(GGally)
 library(tidyr)
 library(reshape2)
+library(latex2exp)
 library(gridExtra)
+library(ggside)
+library(RColorBrewer)
 
 
 draw <- function(drawing_function, file_path, width = 8, height = 8) {
@@ -153,22 +156,46 @@ dev.off()
 We let $y' = \log y$ to fix the skewness of the data.
 
 ```{r}
-y_prime <- log(data$Y)
-fig <- ggplot(data.frame(y_prime), aes(x = y_prime)) +
+y_prime <- log(data$Y) ^ 2
+y_prime_fig <- ggplot(data.frame(y_prime), aes(x = y_prime)) +
   geom_histogram(aes(y = after_stat(density)), fill = "lightblue", color = "black", bins = 30, alpha = 0.6) +
   geom_density(color = "red", linewidth = 1) +
-  labs(title = "Distribution of log(y)", x = "y'") +
+  labs(title = TeX("Distribution of $y' = \\log (y)$"), x = TeX("$y' = \\log(y)$")) +
   theme_minimal()
-
-fig
-
-ggsave(file.path(overview_image_path, "log_Y.pdf"), fig, width = 5, height = 3)
+y_prime_fig
 ```
 
 Finally, we replace the original $y$ with $y'$.
 
 ```{r}
 data$Y <- y_prime
+```
+
+```{r}
+x1_prime <- sqrt(data$X1)
+x1_prime_fig <- ggplot(data.frame(x1_prime), aes(x = x1_prime)) +
+  geom_histogram(aes(y = after_stat(density)), fill = "lightblue", color = "black", bins = 30, alpha = 0.6) +
+  geom_density(color = "red", linewidth = 1) +
+  labs(title = TeX("Distribution of $x_1' = \\sqrt{x_1}$"), x = TeX("$x_1'=\\sqrt{x_1}$")) +
+  theme_minimal()
+x1_prime_fig
+```
+
+```{r}
+data$X1 <- x1_prime
+```
+
+
+```{r fig.width=8, fig.height=3}
+# merge graphs
+merged_graphs <- grid.arrange(
+  y_prime_fig,
+  x1_prime_fig,
+  ncol = 2,
+  widths = c(1, 1)
+)
+
+ggsave(file.path(overview_image_path, "transformed_variables.pdf"), merged_graphs, width = 8, height = 3)
 ```
 
 
@@ -190,35 +217,62 @@ dir.create(X1_output_folder, showWarnings = FALSE)
 ```{r}
 # scatter plot
 scatter_plot_path <- file.path(X1_output_folder, "scatter_plot.pdf")
-scatter_plot_X1 <- ggplot(data, aes(x = X1, y = Y)) +
+scatter_plot_X1 <- ggplot(data, aes(x = x1_prime, y = y_prime)) +
   geom_point(color = "blue") +
   geom_smooth(method = "lm", se = FALSE, color = "red") +
-  labs(title = "Scatter Plot of Y vs. X1") +
+  labs(title = TeX("Scatter Plot of $y'$ vs. $x_1'$"), x = TeX("$x_1'=\\sqrt{x_1}$"), y = TeX("$y'=\\log^2 y$")) +
   theme_minimal()
 ggsave(scatter_plot_path, scatter_plot_X1, width = 8, height = 6)
+scatter_plot_X1
 ```
 
 ```{r}
-slr_X1 <- lm(Y ~ X1, data = data)
+slr_X1 <- lm(y_prime ~ x1_prime, data = data)
 summary(slr_X1)
 ```
 
 
+```{r fig.width=10, fig.height=4}
+# Create the main plot with the residuals
+plot_resid_X1 <- ggplot(data = data.frame(fitted = fitted(slr_X1), residuals = resid(slr_X1)), 
+                        aes(x = fitted, y = residuals)) +
+  # Add points on top
+  geom_point(color = "#1f78b4", alpha = 0.6, size = 2) +
+  # Original elements
+  labs(
+    x = "Fitted values",
+    y = "Residuals",
+    title = "Residuals vs Fitted"
+  ) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+  scale_fill_viridis_d(option = "C") +  # Changed to discrete scale
+  theme_classic(base_size = 12) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    axis.title = element_text(size = 12),
+    panel.grid.major = element_line(color = "gray", linetype = "dashed"),
+  )
 
-```{r}
-plot_resid_X1 <- function() {
-  plot(slr_X1, which = 1)
-}
+qqplot_X1 <- ggplot(data = data.frame(sample = resid(slr_X1)), aes(sample = sample)) +
+  stat_qq(color = "#1f78b4", alpha = 0.6, size = 2) +
+  stat_qq_line(color = "#e31a1c", size = 1) +
+  labs(
+    x = "Theoretical Quantiles",
+    y = "Sample Quantiles",
+    title = "Normal Q-Q"
+  ) +
+  theme_classic(base_size = 12) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    axis.title = element_text(size = 12),
+    panel.grid.major = element_line(color = "gray", linetype = "dashed")
+  )
 
-residuals_image_path_X1 <- file.path(X1_output_folder, "residuals.pdf")
-draw(plot_resid_X1, residuals_image_path_X1)
-```
+# 并排显示
+x1_fig <- grid.arrange(plot_resid_X1, qqplot_X1, ncol = 2)
 
-## Single Variable Analysis
-
-```{r}
-slr_output_folder <- file.path(image_folder, "slr")
-dir.create(slr_output_folder, showWarnings = FALSE)
+# 保存图像
+ggsave(file.path(X1_output_folder, "residuals_vs_fitted_qqplot.pdf"), x1_fig, width = 10, height = 4)
 ```
 
 
@@ -234,13 +288,43 @@ mlr <- lm(Y ~ X1 + X2 + X3 + X4, data = data)
 summary(mlr)
 ```
 
-```{r}
-plot_resid <- function() {
-  plot(mlr, which = 1)
-}
 
-residuals_image_path <- file.path(mlr_output_folder, "residuals.pdf")
-draw(plot_resid, residuals_image_path)
+```{r fig.width=10, fig.height=4}
+plot_resid_mlr <- ggplot(data = data.frame(fitted = fitted(mlr), residuals = resid(mlr)), 
+                        aes(x = fitted, y = residuals)) +
+  geom_point(color = "#1f78b4", alpha = 0.6, size = 2) +
+  labs(
+    x = "Fitted values",
+    y = "Residuals",
+    title = "Residuals vs Fitted"
+  ) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+  scale_fill_viridis_d(option = "C") +
+  theme_classic(base_size = 12) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    axis.title = element_text(size = 12),
+    panel.grid.major = element_line(color = "gray", linetype = "dashed"),
+  )
+
+qqplot_mlr <- ggplot(data = data.frame(sample = resid(mlr)), aes(sample = sample)) +
+  stat_qq(color = "#1f78b4", alpha = 0.6, size = 2) +
+  stat_qq_line(color = "#e31a1c", size = 1) +
+  labs(
+    x = "Theoretical Quantiles",
+    y = "Sample Quantiles",
+    title = "Normal Q-Q"
+  ) +
+  theme_classic(base_size = 12) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    axis.title = element_text(size = 12),
+    panel.grid.major = element_line(color = "gray", linetype = "dashed")
+  )
+
+mlr_res_fig <- grid.arrange(plot_resid_mlr, qqplot_mlr, ncol = 2)
+
+ggsave(file.path(mlr_output_folder, "residuals_vs_fitted_qqplot.pdf"), mlr_res_fig, width = 10, height = 4)
 ```
 
 ```{r}
