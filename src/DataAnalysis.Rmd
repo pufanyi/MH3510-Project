@@ -31,16 +31,19 @@ draw <- function(drawing_function, file_path, width = 8, height = 8) {
   if (!dir.exists(dir_path)) {
     stop("Directory does not exist: ", dir_path)
   }
-  
+
   # Try to create the PDF
-  tryCatch({
-    pdf(file_path, width = width, height = height)
-    drawing_function()
-    dev.off()
-  }, error = function(e) {
-    message("Error creating PDF: ", e$message)
-  })
-  
+  tryCatch(
+    {
+      pdf(file_path, width = width, height = height)
+      drawing_function()
+      dev.off()
+    },
+    error = function(e) {
+      message("Error creating PDF: ", e$message)
+    }
+  )
+
   # Display the plot
   drawing_function()
 }
@@ -69,7 +72,6 @@ dir.create(overview_image_path, showWarnings = FALSE)
 ```
 
 ```{r}
-
 # Create separate plots for each variable
 plot_Y <- ggplot(data, aes(x = Y)) +
   geom_histogram(aes(y = after_stat(density)), fill = "lightblue", color = "black", bins = 30, alpha = 0.6) +
@@ -126,8 +128,10 @@ plot_X4 <- ggplot(data.frame(x4_counts), aes(x = "", y = Freq, fill = Var1)) +
     axis.text = element_blank(),
     axis.title = element_blank(),
   ) +
-  geom_text(aes(
-    label = paste0(round(100 * Freq/sum(Freq), 1), "%")),
+  geom_text(
+    aes(
+      label = paste0(round(100 * Freq / sum(Freq), 1), "%")
+    ),
     position = position_stack(vjust = 0.5)
   )
 
@@ -147,20 +151,21 @@ ggsave(combined_plot_image_path, combined_plot, width = 10, height = 5)
 ```{r}
 pdf(file.path(image_folder, "overview.pdf"), width = 10, height = 10)
 ggpairs(data,
-        upper = list(continuous = wrap("points", color = "blue", alpha = 0.5, size = 2)),
-        lower = list(continuous = wrap("points", color = "red", alpha = 0.5, size = 2)),
-        diag = list(continuous = wrap("densityDiag", fill = "lightblue")))
+  upper = list(continuous = wrap("points", color = "blue", alpha = 0.5, size = 2)),
+  lower = list(continuous = wrap("points", color = "red", alpha = 0.5, size = 2)),
+  diag = list(continuous = wrap("densityDiag", fill = "lightblue"))
+)
 dev.off()
 ```
 
 We let $y' = \log y$ to fix the skewness of the data.
 
 ```{r}
-y_prime <- log(data$Y) ^ 2
+y_prime <- log(data$Y)^2
 y_prime_fig <- ggplot(data.frame(y_prime), aes(x = y_prime)) +
   geom_histogram(aes(y = after_stat(density)), fill = "lightblue", color = "black", bins = 30, alpha = 0.6) +
   geom_density(color = "red", linewidth = 1) +
-  labs(title = TeX("Distribution of $y' = \\log (y)$"), x = TeX("$y' = \\log(y)$")) +
+  labs(title = TeX("Distribution of $y' = \\log^2y$"), x = TeX("$y' = \\log^2y$")) +
   theme_minimal()
 y_prime_fig
 ```
@@ -234,8 +239,10 @@ summary(slr_X1)
 
 ```{r fig.width=10, fig.height=4}
 # Create the main plot with the residuals
-plot_resid_X1 <- ggplot(data = data.frame(fitted = fitted(slr_X1), residuals = resid(slr_X1)), 
-                        aes(x = fitted, y = residuals)) +
+plot_resid_X1 <- ggplot(
+  data = data.frame(fitted = fitted(slr_X1), residuals = resid(slr_X1)),
+  aes(x = fitted, y = residuals)
+) +
   # Add points on top
   geom_point(color = "#1f78b4", alpha = 0.6, size = 2) +
   # Original elements
@@ -245,7 +252,7 @@ plot_resid_X1 <- ggplot(data = data.frame(fitted = fitted(slr_X1), residuals = r
     title = "Residuals vs Fitted"
   ) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
-  scale_fill_viridis_d(option = "C") +  # Changed to discrete scale
+  scale_fill_viridis_d(option = "C") + # Changed to discrete scale
   theme_classic(base_size = 12) +
   theme(
     plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
@@ -268,11 +275,177 @@ qqplot_X1 <- ggplot(data = data.frame(sample = resid(slr_X1)), aes(sample = samp
     panel.grid.major = element_line(color = "gray", linetype = "dashed")
   )
 
-# 并排显示
 x1_fig <- grid.arrange(plot_resid_X1, qqplot_X1, ncol = 2)
 
-# 保存图像
 ggsave(file.path(X1_output_folder, "residuals_vs_fitted_qqplot.pdf"), x1_fig, width = 10, height = 4)
+```
+### X2
+
+```{r}
+X2_output_folder <- file.path(slr_output_folder, "X2")
+dir.create(X2_output_folder, showWarnings = FALSE)
+```
+
+```{r}
+# scatter plot
+scatter_plot_path <- file.path(X2_output_folder, "scatter_plot.pdf")
+scatter_plot_X2 <- ggplot(data, aes(x = X2, y = Y)) +
+  geom_point(color = "blue") +
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  labs(title = "Scatter Plot of Y vs. X2", x = "X2", y = "Y") +
+  theme_minimal()
+ggsave(scatter_plot_path, scatter_plot_X2, width = 8, height = 6)
+scatter_plot_X2
+```
+
+```{r}
+slr_X2 <- lm(Y ~ X2, data = data)
+summary(slr_X2)
+```
+
+```{r fig.width=10, fig.height=4}
+# Create the main plot with the residuals
+plot_resid_X2 <- ggplot(
+  data = data.frame(fitted = fitted(slr_X2), residuals = resid(slr_X2)),
+  aes(x = fitted, y = residuals)
+) +
+  # Add points on top
+  geom_point(color = "#1f78b4", alpha = 0.6, size = 2) +
+  # Original elements
+  labs(
+    x = "Fitted values",
+    y = "Residuals",
+    title = "Residuals vs Fitted"
+  ) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+  scale_fill_viridis_d(option = "C") + # Changed to discrete scale
+  theme_classic(base_size = 12) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    axis.title = element_text(size = 12),
+    panel.grid.major = element_line(color = "gray", linetype = "dashed"),
+  )
+
+qqplot_X2 <- ggplot(data = data.frame(sample = resid(slr_X2)), aes(sample = sample)) +
+  stat_qq(color = "#1f78b4", alpha = 0.6, size = 2) +
+  stat_qq_line(color = "#e31a1c", size = 1) +
+  labs(
+    x = "Theoretical Quantiles",
+    y = "Sample Quantiles",
+    title = "Normal Q-Q"
+  ) +
+  theme_classic(base_size = 12) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    axis.title = element_text(size = 12),
+    panel.grid.major = element_line(color = "gray", linetype = "dashed")
+  )
+
+x2_fig <- grid.arrange(plot_resid_X2, qqplot_X2, ncol = 2)
+
+ggsave(file.path(X2_output_folder, "residuals_vs_fitted_qqplot.pdf"), x2_fig, width = 10, height = 4)
+```
+
+### X3
+
+```{r}
+X3_output_folder <- file.path(slr_output_folder, "X3")
+dir.create(X3_output_folder, showWarnings = FALSE)
+```
+
+```{r}
+# scatter plot
+scatter_plot_path <- file.path(X3_output_folder, "scatter_plot.pdf")
+scatter_plot_X3 <- ggplot(data, aes(x = X3, y = Y)) +
+  geom_point(color = "blue") +
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  labs(title = "Scatter Plot of Y vs. X3", x = "X3", y = "Y") +
+  theme_minimal()
+ggsave(scatter_plot_path, scatter_plot_X3, width = 8, height = 6)
+scatter_plot_X3
+```
+
+```{r}
+slr_X3 <- lm(Y ~ X3, data = data)
+summary(slr_X3)
+```
+
+### X4
+
+```{r}
+X4_output_folder <- file.path(slr_output_folder, "X4")
+dir.create(X4_output_folder, showWarnings = FALSE)
+```
+
+```{r}
+# split data for X4 = 0 and X4 = 1
+y_control <- data[data$X4 == 1, "Y"]
+y_no_control <- data[data$X4 == 2, "Y"]
+```
+
+
+```{r}
+# plot the histograms for both groups in the same plot, length of the bins are not the same, so use density
+
+# Define a custom color palette
+custom_colors <- c("#2E86AB", "#A23B72", "#F18F01", "#C73E1D")
+
+# Create enhanced histogram
+histogram_path <- file.path(X4_output_folder, "histogram.pdf")
+histogram_X4 <- ggplot(data, aes(x = Y, fill = factor(X4))) +
+  geom_histogram(
+    aes(y = after_stat(density)),
+    bins = 30,
+    alpha = 0.8,
+    color = "white",
+    size = 0.2
+  ) +
+  # Add density curve
+  geom_density(
+    aes(color = factor(X4)),
+    alpha = 0.2,
+    size = 1
+  ) +
+  # Customize labels
+  labs(
+    title = TeX("Distribution of $y'$ across $x_4$"),
+    x = TeX("$y' = \\log^2 y$"),
+    y = "Density",
+    fill = TeX("Category $x_4$"),
+    color = TeX("Density Curve")
+  ) +
+  # Apply custom theme
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 16, face = "bold", margin = margin(b = 10)),
+    plot.subtitle = element_text(size = 12, color = "gray50", margin = margin(b = 20)),
+    axis.title = element_text(size = 12, face = "bold"),
+    axis.text = element_text(size = 10),
+    legend.title = element_text(size = 11, face = "bold"),
+    legend.text = element_text(size = 10),
+    legend.position = "right",
+    panel.grid.minor = element_blank(),
+    panel.grid.major = element_line(color = "gray90"),
+    plot.background = element_rect(fill = "white", color = NA),
+    panel.background = element_rect(fill = "white", color = NA)
+  ) +
+  # Apply custom colors
+  scale_fill_manual(values = custom_colors) +
+  scale_color_manual(values = custom_colors)
+
+
+# Save with higher resolution
+ggsave(
+  histogram_path,
+  histogram_X4,
+  width = 10,
+  height = 7,
+  dpi = 300,
+  bg = "white"
+)
+
+# Display plot
+histogram_X4
 ```
 
 
@@ -288,10 +461,30 @@ mlr <- lm(Y ~ X1 + X2 + X3 + X4, data = data)
 summary(mlr)
 ```
 
+```{r}
+predicted <- predict(mlr, data[, c("X1", "X2", "X3", "X4")])
+```
+
+```{r}
+# bar plot for predicted values, no need to save
+barplot(predicted, col = "lightblue", main = "Predicted values")
+barplot(y, col = "lightblue", main = "Actual values")
+```
+
+```{r, fig.width=5, fig.height=5}
+# scatter plot y vs predicted values, no need to save
+plot(y, predicted, col = "blue", main = "y vs predicted values")
+# y=x
+abline(0, 1, col = "red")
+```
+
+
 
 ```{r fig.width=10, fig.height=4}
-plot_resid_mlr <- ggplot(data = data.frame(fitted = fitted(mlr), residuals = resid(mlr)), 
-                        aes(x = fitted, y = residuals)) +
+plot_resid_mlr <- ggplot(
+  data = data.frame(fitted = fitted(mlr), residuals = resid(mlr)),
+  aes(x = fitted, y = residuals)
+) +
   geom_point(color = "#1f78b4", alpha = 0.6, size = 2) +
   labs(
     x = "Fitted values",
@@ -325,14 +518,4 @@ qqplot_mlr <- ggplot(data = data.frame(sample = resid(mlr)), aes(sample = sample
 mlr_res_fig <- grid.arrange(plot_resid_mlr, qqplot_mlr, ncol = 2)
 
 ggsave(file.path(mlr_output_folder, "residuals_vs_fitted_qqplot.pdf"), mlr_res_fig, width = 10, height = 4)
-```
-
-```{r}
-draw_qqplot <- function() {
-  qqnorm(resid(mlr))
-  qqline(resid(mlr), col = "red")
-}
-
-qqplot_image_path <- file.path(mlr_output_folder, "qqplot.pdf")
-draw(draw_qqplot, qqplot_image_path)
 ```
