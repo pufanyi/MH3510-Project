@@ -143,6 +143,7 @@ combined_plot <- grid.arrange(
   widths = c(3, 1)
 )
 
+combined_plot_image_path <- file.path(overview_image_path, "combined_histograms.pdf")
 ggsave(combined_plot_image_path, combined_plot, width = 10, height = 5)
 ```
 
@@ -262,7 +263,7 @@ plot_resid_X1 <- ggplot(
 
 qqplot_X1 <- ggplot(data = data.frame(sample = resid(slr_X1)), aes(sample = sample)) +
   stat_qq(color = "#1f78b4", alpha = 0.6, size = 2) +
-  stat_qq_line(color = "#e31a1c", size = 1) +
+  stat_qq_line(color = "#e31a1c", linewidth = 1) +
   labs(
     x = "Theoretical Quantiles",
     y = "Sample Quantiles",
@@ -438,22 +439,49 @@ histogram_X4 <- ggplot(data, aes(x = Y, fill = factor(X4))) +
 ggsave(
   histogram_path,
   histogram_X4,
-  width = 10,
-  height = 7,
-  dpi = 300,
-  bg = "white"
+  width = 8,
+  height = 4,
 )
 
 # Display plot
 histogram_X4
 ```
 
-$\mathcal{H}_0$: $\mu_{\text{control}} \le \mu_{\text{no control}}$
+
+
+We can build the model
+
+$$
+\begin{aligned}
+y'_{ij} = \theta_i + \epsilon_{ij}, && i \in \{1, 2\}, j \in \left\{1, \cdots, n_i\right\}, && \epsilon_{ij}\sim \mathcal{N}\left(0, \sigma^2\right)
+\end{aligned}
+$$
 
 ```{r}
-t.test(y_control, y_no_control, alternative = "less")
+theta_1 <- mean(y_control)
+theta_2 <- mean(y_no_control)
+print(paste("theta_1 = ", theta_1))
+print(paste("theta_2 = ", theta_2))
 ```
 
+So
+
+$$
+\begin{cases}
+  \hat{\theta}_1 = \overline{y_{1\cdot}}\approx 114.10 \\
+  \hat{\theta}_2 = \overline{y_{2\cdot}}\approx 70.48
+\end{cases}
+$$
+
+We build ANOVA table
+
+```{r}
+group_y <- c(y_control, y_no_control)
+group <- factor(rep(c("control", "no control"), c(length(y_control), length(y_no_control)))
+)
+anova_table <- aov(group_y ~ group)
+summary(anova_table)
+```
 
 ## Multiple Linear Regression
 
@@ -471,15 +499,9 @@ summary(mlr)
 predicted <- predict(mlr, data[, c("X1", "X2", "X3", "X4")])
 ```
 
-```{r}
-# bar plot for predicted values, no need to save
-barplot(predicted, col = "lightblue", main = "Predicted values")
-barplot(y, col = "lightblue", main = "Actual values")
-```
-
 ```{r, fig.width=5, fig.height=5}
 # scatter plot y vs predicted values, no need to save
-plot(y, predicted, col = "blue", main = "y vs predicted values")
+plot(data$Y, predicted, col = "blue", main = "y vs predicted values")
 # y=x
 abline(0, 1, col = "red")
 ```
