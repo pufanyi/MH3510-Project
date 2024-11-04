@@ -388,7 +388,7 @@ y_no_control <- data[data$X4 == 2, "Y"]
 # plot the histograms for both groups in the same plot, length of the bins are not the same, so use density
 
 # Define a custom color palette
-custom_colors <- c("#2E86AB", "#A23B72", "#F18F01", "#C73E1D")
+custom_colors <- c("#2E86AB", "#A23B72")
 
 # Create enhanced histogram
 histogram_path <- file.path(X4_output_folder, "histogram.pdf")
@@ -430,8 +430,8 @@ histogram_X4 <- ggplot(data, aes(x = Y, fill = factor(X4))) +
     panel.background = element_rect(fill = "white", color = NA)
   ) +
   # Apply custom colors
-  scale_fill_manual(values = custom_colors) +
-  scale_color_manual(values = custom_colors)
+  scale_fill_manual(values = custom_colors, labels = c("Control", "No Control")) +
+  scale_color_manual(values = custom_colors, labels = c("Control", "No Control"))
 
 
 # Save with higher resolution
@@ -446,6 +446,12 @@ ggsave(
 
 # Display plot
 histogram_X4
+```
+
+$\mathcal{H}_0$: $\mu_{\text{control}} \le \mu_{\text{no control}}$
+
+```{r}
+t.test(y_control, y_no_control, alternative = "less")
 ```
 
 
