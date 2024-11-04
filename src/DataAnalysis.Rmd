@@ -3,7 +3,7 @@ title: "DataAnalysis"
 author: Pu Fanyi
 date: "`r Sys.Date()`"
 knit: (function(inputFile, encoding) {
-      out_dir <- "../docs";
+      out_dir <- "../docs/";
       rmarkdown::render(inputFile,
                         encoding=encoding,
                         output_dir=file.path(dirname(inputFile), out_dir));})

@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="generator" content="pandoc" />
+
+        <meta name="author" content="Pu Fanyi" />
+    
+        <meta name="date" content="2024-11-04" />
+    
+    <title>DataAnalysis</title>
+
+        <script src="DataAnalysis_files/header-attrs-2.28/header-attrs.js"></script>
+        <script src="DataAnalysis_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link href="DataAnalysis_files/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+        <script src="DataAnalysis_files/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+        <script src="DataAnalysis_files/navigation-1.1/tabsets.js"></script>
+        <link href="DataAnalysis_files/readthedown-0.1/readthedown.css" rel="stylesheet" />
+        <link href="DataAnalysis_files/readthedown-0.1/readthedown_fonts_embed.css" rel="stylesheet" />
+        <script src="DataAnalysis_files/readthedown-0.1/readthedown.js"></script>
+    
+    
+        <style type="text/css">code{white-space: pre;}</style>
+    <style type="text/css">
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+          background-color: #ffffff;
+          color: #a0a0a0;
+        }
+      pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+      div.sourceCode
+        { color: #1f1c1b; background-color: #ffffff; }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span { color: #1f1c1b; } /* Normal */
+      code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+      code span.an { color: #ca60ca; } /* Annotation */
+      code span.at { color: #0057ae; } /* Attribute */
+      code span.bn { color: #b08000; } /* BaseN */
+      code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+      code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+      code span.ch { color: #924c9d; } /* Char */
+      code span.cn { color: #aa5500; } /* Constant */
+      code span.co { color: #898887; } /* Comment */
+      code span.cv { color: #0095ff; } /* CommentVar */
+      code span.do { color: #607880; } /* Documentation */
+      code span.dt { color: #0057ae; } /* DataType */
+      code span.dv { color: #b08000; } /* DecVal */
+      code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+      code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+      code span.fl { color: #b08000; } /* Float */
+      code span.fu { color: #644a9b; } /* Function */
+      code span.im { color: #ff5500; } /* Import */
+      code span.in { color: #b08000; } /* Information */
+      code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+      code span.op { color: #1f1c1b; } /* Operator */
+      code span.ot { color: #006e28; } /* Other */
+      code span.pp { color: #006e28; } /* Preprocessor */
+      code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+      code span.sc { color: #3daee9; } /* SpecialChar */
+      code span.ss { color: #ff5500; } /* SpecialString */
+      code span.st { color: #bf0303; } /* String */
+      code span.va { color: #0057ae; } /* Variable */
+      code span.vs { color: #bf0303; } /* VerbatimString */
+      code span.wa { color: #bf0303; } /* Warning */
+    </style>
+    
+    
+    <!-- tabsets -->
+    <script>
+      $(document).ready(function () {
+	  window.buildTabsets("toc");
+      });
+      $(document).ready(function () {
+	  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+	      $(this).parent().toggleClass('nav-tabs-open')
+	  });
+      });
+    </script>
+
+    <!-- code folding -->
+    
+    <!-- code download -->
+    
+    <!-- tabsets dropdown -->
+
+    <style type="text/css">
+      .tabset-dropdown > .nav-tabs {
+	  display: inline-table;
+	  max-height: 500px;
+	  min-height: 44px;
+	  overflow-y: auto;
+	  background: white;
+	  border: 1px solid #ddd;
+	  border-radius: 4px;
+      }
+      
+      .tabset-dropdown > .nav-tabs > li.active:before {
+	  content: "";
+	  font-family: 'Glyphicons Halflings';
+	  display: inline-block;
+	  padding: 10px;
+	  border-right: 1px solid #ddd;
+      }
+      
+      .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+	  content: "&#xe258;";
+	  border: none;
+      }
+      
+      .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+	  content: "";
+	  font-family: 'Glyphicons Halflings';
+	  display: inline-block;
+	  padding: 10px;
+	  border-right: 1px solid #ddd;
+      }
+      
+      .tabset-dropdown > .nav-tabs > li.active {
+	  display: block;
+      }
+
+      .tabset-dropdown > .nav-tabs > li.active a {
+  	  padding: 0 15px !important;
+      }
+
+      .tabset-dropdown > .nav-tabs > li > a,
+      .tabset-dropdown > .nav-tabs > li > a:focus,
+      .tabset-dropdown > .nav-tabs > li > a:hover {
+	  border: none;
+	  display: inline-block;
+	  border-radius: 4px;
+	  background-color: transparent;
+      }
+      
+      .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+	  display: block;
+	  float: none;
+      }
+      
+      .tabset-dropdown > .nav-tabs > li {
+	  display: none;
+	  margin-left: 0 !important;
+      }
+    </style>
+    
+</head>
+
+<body class="preload">
+
+   	
+         <!-- readthedown start -->   
+   <div id="content" data-toggle="wy-nav-shift">
+     <nav id="nav-top" role="navigation" aria-label="top navigation">
+       <a role="button" href="#" data-toggle="wy-nav-top"><span class="glyphicon glyphicon-menu-hamburger"></span></a>
+     </nav>
+         
+   
+        
+      <h1 class="title">DataAnalysis</h1>
+      
+         <!-- readthedown authors -->
+   <div id="sidebar">
+    <h2><a href="#content">DataAnalysis</a></h2>
+    <div id="toc">
+      <ul>
+      <li><a href="#setup-and-load-data"
+      id="toc-setup-and-load-data">Setup and Load Data</a></li>
+      <li><a href="#overview-of-the-data"
+      id="toc-overview-of-the-data">Overview of the data</a></li>
+      <li><a href="#graphic-display-of-the-observed-data"
+      id="toc-graphic-display-of-the-observed-data">Graphic display of
+      the observed data</a></li>
+      <li><a href="#single-variable-analysis"
+      id="toc-single-variable-analysis">Single Variable
+      Analysis</a></li>
+      <li><a href="#multiple-linear-regression"
+      id="toc-multiple-linear-regression">Multiple Linear
+      Regression</a></li>
+      </ul>
+    </div>
+    <div id="postamble" data-toggle="wy-nav-shift" class="status">
+                  <p class="author"><span class="glyphicon glyphicon-user"></span> Pu
+Fanyi</p>
+                        <p class="date"><span class="glyphicon glyphicon-calendar"></span> 2024-11-04</p>
+          </div>
+   </div>
+     
+
+   
+      
+   
+<!-- Don't indent these lines or it will mess pre blocks indentation --> 
+<div id="main">
+<div id="setup-and-load-data" class="section level2">
+<h2>Setup and Load Data</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(reshape2)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">library</span>(latex2exp)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="fu">library</span>(ggside)</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>draw <span class="ot">&lt;-</span> <span class="cf">function</span>(drawing_function, file_path, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">8</span>) {</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>  <span class="co"># Check if the directory exists</span></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>  dir_path <span class="ot">&lt;-</span> <span class="fu">dirname</span>(file_path)</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(dir_path)) {</span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">&quot;Directory does not exist: &quot;</span>, dir_path)</span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>  }</span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a>  <span class="co"># Try to create the PDF</span></span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a>  <span class="fu">tryCatch</span>(</span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a>    {</span>
+<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a>      <span class="fu">pdf</span>(file_path, <span class="at">width =</span> width, <span class="at">height =</span> height)</span>
+<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a>      <span class="fu">drawing_function</span>()</span>
+<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a>      <span class="fu">dev.off</span>()</span>
+<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a>    },</span>
+<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a>    <span class="at">error =</span> <span class="cf">function</span>(e) {</span>
+<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a>      <span class="fu">message</span>(<span class="st">&quot;Error creating PDF: &quot;</span>, e<span class="sc">$</span>message)</span>
+<span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a>    }</span>
+<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a>  )</span>
+<span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" tabindex="-1"></a>  <span class="co"># Display the plot</span></span>
+<span id="cb1-31"><a href="#cb1-31" tabindex="-1"></a>  <span class="fu">drawing_function</span>()</span>
+<span id="cb1-32"><a href="#cb1-32" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>columns <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Y&quot;</span>, <span class="st">&quot;X1&quot;</span>, <span class="st">&quot;X2&quot;</span>, <span class="st">&quot;X3&quot;</span>, <span class="st">&quot;X4&quot;</span>, <span class="st">&quot;X5&quot;</span>, <span class="st">&quot;X6&quot;</span>, <span class="st">&quot;X7&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>file <span class="ot">&lt;-</span> <span class="st">&quot;../assets/aadt.txt&quot;</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>data_raw <span class="ot">&lt;-</span> <span class="fu">read.table</span>(file, <span class="at">col.names =</span> columns)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>data <span class="ot">&lt;-</span> data_raw[, <span class="fu">c</span>(<span class="st">&quot;Y&quot;</span>, <span class="st">&quot;X1&quot;</span>, <span class="st">&quot;X2&quot;</span>, <span class="st">&quot;X3&quot;</span>, <span class="st">&quot;X4&quot;</span>)]</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="fu">head</span>(data)</span></code></pre></div>
+<pre><code>##      Y    X1 X2 X3 X4
+## 1 1616 13404  2 52  2
+## 2 1329 52314  2 60  2
+## 3 3933 30982  2 57  2
+## 4 3786 25207  2 64  2
+## 5  465 20594  2 40  2
+## 6  794 11507  2 44  2</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>image_folder <span class="ot">&lt;-</span> <span class="st">&quot;../assets/images/&quot;</span></span></code></pre></div>
+</div>
+<div id="overview-of-the-data" class="section level2">
+<h2>Overview of the data</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>overview_image_path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(image_folder, <span class="st">&quot;overview&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">dir.create</span>(overview_image_path, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># Create separate plots for each variable</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>plot_Y <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> Y)) <span class="sc">+</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)), <span class="at">fill =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">bins =</span> <span class="dv">30</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Distribution of Y&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>plot_X1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> X1)) <span class="sc">+</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)), <span class="at">fill =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">bins =</span> <span class="dv">30</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Distribution of X1&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>plot_X2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> X2)) <span class="sc">+</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)), <span class="at">fill =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">bins =</span> <span class="dv">30</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Distribution of X2&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a>plot_X3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> X3)) <span class="sc">+</span></span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)), <span class="at">fill =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">bins =</span> <span class="dv">30</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Distribution of X3&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a></span>
+<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a><span class="co"># Arrange histograms in 2x2 grid</span></span>
+<span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a>histogram_grid <span class="ot">&lt;-</span> <span class="fu">arrangeGrob</span>(</span>
+<span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a>  plot_Y, plot_X1, plot_X2, plot_X3,</span>
+<span id="cb7-29"><a href="#cb7-29" tabindex="-1"></a>  <span class="at">ncol =</span> <span class="dv">2</span>,</span>
+<span id="cb7-30"><a href="#cb7-30" tabindex="-1"></a>  <span class="at">nrow =</span> <span class="dv">2</span></span>
+<span id="cb7-31"><a href="#cb7-31" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># Create pie chart for X4</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>x4_counts <span class="ot">&lt;-</span> <span class="fu">table</span>(data<span class="sc">$</span>X4)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>plot_X4 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(x4_counts), <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> Freq, <span class="at">fill =</span> Var1)) <span class="sc">+</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="at">width =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  <span class="fu">coord_polar</span>(<span class="st">&quot;y&quot;</span>, <span class="at">start =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Distribution of X4&quot;</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">&quot;Category&quot;</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(</span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#FF9999&quot;</span>, <span class="st">&quot;#66B2FF&quot;</span>),</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;yes&quot;</span>, <span class="st">&quot;no&quot;</span>)</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(),</span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a>  <span class="fu">geom_text</span>(</span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a>      <span class="at">label =</span> <span class="fu">paste0</span>(<span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> Freq <span class="sc">/</span> <span class="fu">sum</span>(Freq), <span class="dv">1</span>), <span class="st">&quot;%&quot;</span>)</span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a>    ),</span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a>    <span class="at">position =</span> <span class="fu">position_stack</span>(<span class="at">vjust =</span> <span class="fl">0.5</span>)</span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a>  )</span>
+<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a></span>
+<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a><span class="co"># Combine histogram grid and pie chart vertically</span></span>
+<span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a>combined_plot <span class="ot">&lt;-</span> <span class="fu">grid.arrange</span>(</span>
+<span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a>  histogram_grid,</span>
+<span id="cb8-33"><a href="#cb8-33" tabindex="-1"></a>  plot_X4,</span>
+<span id="cb8-34"><a href="#cb8-34" tabindex="-1"></a>  <span class="at">ncol =</span> <span class="dv">2</span>,</span>
+<span id="cb8-35"><a href="#cb8-35" tabindex="-1"></a>  <span class="at">widths =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">1</span>)</span>
+<span id="cb8-36"><a href="#cb8-36" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-6-1.png" width="960" /></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>combined_plot_image_path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(overview_image_path, <span class="st">&quot;combined_histograms.pdf&quot;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">ggsave</span>(combined_plot_image_path, combined_plot, <span class="at">width =</span> <span class="dv">10</span>, <span class="at">height =</span> <span class="dv">5</span>)</span></code></pre></div>
+</div>
+<div id="graphic-display-of-the-observed-data" class="section level2">
+<h2>Graphic display of the observed data</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">pdf</span>(<span class="fu">file.path</span>(image_folder, <span class="st">&quot;overview.pdf&quot;</span>), <span class="at">width =</span> <span class="dv">10</span>, <span class="at">height =</span> <span class="dv">10</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">ggpairs</span>(data,</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="at">upper =</span> <span class="fu">list</span>(<span class="at">continuous =</span> <span class="fu">wrap</span>(<span class="st">&quot;points&quot;</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">2</span>)),</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="at">lower =</span> <span class="fu">list</span>(<span class="at">continuous =</span> <span class="fu">wrap</span>(<span class="st">&quot;points&quot;</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">2</span>)),</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="at">diag =</span> <span class="fu">list</span>(<span class="at">continuous =</span> <span class="fu">wrap</span>(<span class="st">&quot;densityDiag&quot;</span>, <span class="at">fill =</span> <span class="st">&quot;lightblue&quot;</span>))</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>)</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
+<pre><code>## png 
+##   2</code></pre>
+<p>We let <span class="math inline">\(y&#39; = \log y\)</span> to fix
+the skewness of the data.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>y_prime <span class="ot">&lt;-</span> <span class="fu">log</span>(data<span class="sc">$</span>Y)<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>y_prime_fig <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(y_prime), <span class="fu">aes</span>(<span class="at">x =</span> y_prime)) <span class="sc">+</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)), <span class="at">fill =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">bins =</span> <span class="dv">30</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">TeX</span>(<span class="st">&quot;Distribution of $y&#39; = </span><span class="sc">\\</span><span class="st">log^2y$&quot;</span>), <span class="at">x =</span> <span class="fu">TeX</span>(<span class="st">&quot;$y&#39; = </span><span class="sc">\\</span><span class="st">log^2y$&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>y_prime_fig</span></code></pre></div>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-8-1.png" width="768" /></p>
+<p>Finally, we replace the original <span
+class="math inline">\(y\)</span> with <span
+class="math inline">\(y&#39;\)</span>.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>data<span class="sc">$</span>Y <span class="ot">&lt;-</span> y_prime</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>x1_prime <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(data<span class="sc">$</span>X1)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>x1_prime_fig <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="fu">data.frame</span>(x1_prime), <span class="fu">aes</span>(<span class="at">x =</span> x1_prime)) <span class="sc">+</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)), <span class="at">fill =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">bins =</span> <span class="dv">30</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">TeX</span>(<span class="st">&quot;Distribution of $x_1&#39; = </span><span class="sc">\\</span><span class="st">sqrt{x_1}$&quot;</span>), <span class="at">x =</span> <span class="fu">TeX</span>(<span class="st">&quot;$x_1&#39;=</span><span class="sc">\\</span><span class="st">sqrt{x_1}$&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>x1_prime_fig</span></code></pre></div>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-10-1.png" width="768" /></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>data<span class="sc">$</span>X1 <span class="ot">&lt;-</span> x1_prime</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># merge graphs</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>merged_graphs <span class="ot">&lt;-</span> <span class="fu">grid.arrange</span>(</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>  y_prime_fig,</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>  x1_prime_fig,</span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>  <span class="at">ncol =</span> <span class="dv">2</span>,</span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>  <span class="at">widths =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>)</span></code></pre></div>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-12-1.png" width="768" /></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">file.path</span>(overview_image_path, <span class="st">&quot;transformed_variables.pdf&quot;</span>), merged_graphs, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">3</span>)</span></code></pre></div>
+</div>
+<div id="single-variable-analysis" class="section level2">
+<h2>Single Variable Analysis</h2>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>slr_output_folder <span class="ot">&lt;-</span> <span class="fu">file.path</span>(image_folder, <span class="st">&quot;slr&quot;</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="fu">dir.create</span>(slr_output_folder, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div id="x1" class="section level3">
+<h3>X1</h3>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>X1_output_folder <span class="ot">&lt;-</span> <span class="fu">file.path</span>(slr_output_folder, <span class="st">&quot;X1&quot;</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="fu">dir.create</span>(X1_output_folder, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="co"># scatter plot</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>scatter_plot_path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(X1_output_folder, <span class="st">&quot;scatter_plot.pdf&quot;</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>scatter_plot_X1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> x1_prime, <span class="at">y =</span> y_prime)) <span class="sc">+</span></span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="fu">TeX</span>(<span class="st">&quot;Scatter Plot of $y&#39;$ vs. $x_1&#39;$&quot;</span>), <span class="at">x =</span> <span class="fu">TeX</span>(<span class="st">&quot;$x_1&#39;=</span><span class="sc">\\</span><span class="st">sqrt{x_1}$&quot;</span>), <span class="at">y =</span> <span class="fu">TeX</span>(<span class="st">&quot;$y&#39;=</span><span class="sc">\\</span><span class="st">log^2 y$&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a><span class="fu">ggsave</span>(scatter_plot_path, scatter_plot_X1, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>)</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>scatter_plot_X1</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-15-1.png" width="768" /></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>slr_X1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(y_prime <span class="sc">~</span> x1_prime, <span class="at">data =</span> data)</span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="fu">summary</span>(slr_X1)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y_prime ~ x1_prime, data = data)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -71.497 -15.752  -2.273  15.791  40.708 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 53.487764   3.232405   16.55   &lt;2e-16 ***
+## x1_prime     0.063839   0.006298   10.14   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 20.57 on 119 degrees of freedom
+## Multiple R-squared:  0.4634, Adjusted R-squared:  0.4588 
+## F-statistic: 102.7 on 1 and 119 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="co"># Create the main plot with the residuals</span></span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>plot_resid_X1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(</span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a>  <span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">fitted =</span> <span class="fu">fitted</span>(slr_X1), <span class="at">residuals =</span> <span class="fu">resid</span>(slr_X1)),</span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> fitted, <span class="at">y =</span> residuals)</span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a>  <span class="co"># Add points on top</span></span>
+<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">&quot;#1f78b4&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb26-8"><a href="#cb26-8" tabindex="-1"></a>  <span class="co"># Original elements</span></span>
+<span id="cb26-9"><a href="#cb26-9" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb26-10"><a href="#cb26-10" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Fitted values&quot;</span>,</span>
+<span id="cb26-11"><a href="#cb26-11" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Residuals&quot;</span>,</span>
+<span id="cb26-12"><a href="#cb26-12" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Residuals vs Fitted&quot;</span></span>
+<span id="cb26-13"><a href="#cb26-13" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb26-14"><a href="#cb26-14" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb26-15"><a href="#cb26-15" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_d</span>(<span class="at">option =</span> <span class="st">&quot;C&quot;</span>) <span class="sc">+</span> <span class="co"># Changed to discrete scale</span></span>
+<span id="cb26-16"><a href="#cb26-16" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb26-17"><a href="#cb26-17" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb26-18"><a href="#cb26-18" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb26-19"><a href="#cb26-19" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb26-20"><a href="#cb26-20" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">&quot;gray&quot;</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>),</span>
+<span id="cb26-21"><a href="#cb26-21" tabindex="-1"></a>  )</span>
+<span id="cb26-22"><a href="#cb26-22" tabindex="-1"></a></span>
+<span id="cb26-23"><a href="#cb26-23" tabindex="-1"></a>qqplot_X1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">sample =</span> <span class="fu">resid</span>(slr_X1)), <span class="fu">aes</span>(<span class="at">sample =</span> sample)) <span class="sc">+</span></span>
+<span id="cb26-24"><a href="#cb26-24" tabindex="-1"></a>  <span class="fu">stat_qq</span>(<span class="at">color =</span> <span class="st">&quot;#1f78b4&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb26-25"><a href="#cb26-25" tabindex="-1"></a>  <span class="fu">stat_qq_line</span>(<span class="at">color =</span> <span class="st">&quot;#e31a1c&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb26-26"><a href="#cb26-26" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb26-27"><a href="#cb26-27" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Theoretical Quantiles&quot;</span>,</span>
+<span id="cb26-28"><a href="#cb26-28" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Sample Quantiles&quot;</span>,</span>
+<span id="cb26-29"><a href="#cb26-29" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Normal Q-Q&quot;</span></span>
+<span id="cb26-30"><a href="#cb26-30" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb26-31"><a href="#cb26-31" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb26-32"><a href="#cb26-32" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb26-33"><a href="#cb26-33" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb26-34"><a href="#cb26-34" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb26-35"><a href="#cb26-35" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">&quot;gray&quot;</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>)</span>
+<span id="cb26-36"><a href="#cb26-36" tabindex="-1"></a>  )</span>
+<span id="cb26-37"><a href="#cb26-37" tabindex="-1"></a></span>
+<span id="cb26-38"><a href="#cb26-38" tabindex="-1"></a>x1_fig <span class="ot">&lt;-</span> <span class="fu">grid.arrange</span>(plot_resid_X1, qqplot_X1, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-17-1.png" width="960" /></p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">file.path</span>(X1_output_folder, <span class="st">&quot;residuals_vs_fitted_qqplot.pdf&quot;</span>), x1_fig, <span class="at">width =</span> <span class="dv">10</span>, <span class="at">height =</span> <span class="dv">4</span>)</span></code></pre></div>
+</div>
+<div id="x2" class="section level3">
+<h3>X2</h3>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a>X2_output_folder <span class="ot">&lt;-</span> <span class="fu">file.path</span>(slr_output_folder, <span class="st">&quot;X2&quot;</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a><span class="fu">dir.create</span>(X2_output_folder, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="co"># scatter plot</span></span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a>scatter_plot_path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(X2_output_folder, <span class="st">&quot;scatter_plot.pdf&quot;</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a>scatter_plot_X2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> X2, <span class="at">y =</span> Y)) <span class="sc">+</span></span>
+<span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb29-5"><a href="#cb29-5" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb29-6"><a href="#cb29-6" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Scatter Plot of Y vs. X2&quot;</span>, <span class="at">x =</span> <span class="st">&quot;X2&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Y&quot;</span>) <span class="sc">+</span></span>
+<span id="cb29-7"><a href="#cb29-7" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb29-8"><a href="#cb29-8" tabindex="-1"></a><span class="fu">ggsave</span>(scatter_plot_path, scatter_plot_X2, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>)</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a>scatter_plot_X2</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-19-1.png" width="768" /></p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a>slr_X2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> X2, <span class="at">data =</span> data)</span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a><span class="fu">summary</span>(slr_X2)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = Y ~ X2, data = data)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -32.614 -10.185   0.024   9.303  34.108 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)   25.304      3.754    6.74    6e-10 ***
+## X2            17.718      1.118   15.85   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 15.92 on 119 degrees of freedom
+## Multiple R-squared:  0.6786, Adjusted R-squared:  0.6759 
+## F-statistic: 251.3 on 1 and 119 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a><span class="co"># Create the main plot with the residuals</span></span>
+<span id="cb35-2"><a href="#cb35-2" tabindex="-1"></a>plot_resid_X2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(</span>
+<span id="cb35-3"><a href="#cb35-3" tabindex="-1"></a>  <span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">fitted =</span> <span class="fu">fitted</span>(slr_X2), <span class="at">residuals =</span> <span class="fu">resid</span>(slr_X2)),</span>
+<span id="cb35-4"><a href="#cb35-4" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> fitted, <span class="at">y =</span> residuals)</span>
+<span id="cb35-5"><a href="#cb35-5" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb35-6"><a href="#cb35-6" tabindex="-1"></a>  <span class="co"># Add points on top</span></span>
+<span id="cb35-7"><a href="#cb35-7" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">&quot;#1f78b4&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb35-8"><a href="#cb35-8" tabindex="-1"></a>  <span class="co"># Original elements</span></span>
+<span id="cb35-9"><a href="#cb35-9" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb35-10"><a href="#cb35-10" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Fitted values&quot;</span>,</span>
+<span id="cb35-11"><a href="#cb35-11" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Residuals&quot;</span>,</span>
+<span id="cb35-12"><a href="#cb35-12" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Residuals vs Fitted&quot;</span></span>
+<span id="cb35-13"><a href="#cb35-13" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb35-14"><a href="#cb35-14" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb35-15"><a href="#cb35-15" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_d</span>(<span class="at">option =</span> <span class="st">&quot;C&quot;</span>) <span class="sc">+</span> <span class="co"># Changed to discrete scale</span></span>
+<span id="cb35-16"><a href="#cb35-16" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb35-17"><a href="#cb35-17" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb35-18"><a href="#cb35-18" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb35-19"><a href="#cb35-19" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb35-20"><a href="#cb35-20" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">&quot;gray&quot;</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>),</span>
+<span id="cb35-21"><a href="#cb35-21" tabindex="-1"></a>  )</span>
+<span id="cb35-22"><a href="#cb35-22" tabindex="-1"></a></span>
+<span id="cb35-23"><a href="#cb35-23" tabindex="-1"></a>qqplot_X2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">sample =</span> <span class="fu">resid</span>(slr_X2)), <span class="fu">aes</span>(<span class="at">sample =</span> sample)) <span class="sc">+</span></span>
+<span id="cb35-24"><a href="#cb35-24" tabindex="-1"></a>  <span class="fu">stat_qq</span>(<span class="at">color =</span> <span class="st">&quot;#1f78b4&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb35-25"><a href="#cb35-25" tabindex="-1"></a>  <span class="fu">stat_qq_line</span>(<span class="at">color =</span> <span class="st">&quot;#e31a1c&quot;</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb35-26"><a href="#cb35-26" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb35-27"><a href="#cb35-27" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Theoretical Quantiles&quot;</span>,</span>
+<span id="cb35-28"><a href="#cb35-28" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Sample Quantiles&quot;</span>,</span>
+<span id="cb35-29"><a href="#cb35-29" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Normal Q-Q&quot;</span></span>
+<span id="cb35-30"><a href="#cb35-30" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb35-31"><a href="#cb35-31" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb35-32"><a href="#cb35-32" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb35-33"><a href="#cb35-33" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb35-34"><a href="#cb35-34" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb35-35"><a href="#cb35-35" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">&quot;gray&quot;</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>)</span>
+<span id="cb35-36"><a href="#cb35-36" tabindex="-1"></a>  )</span></code></pre></div>
+<pre><code>## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+## ℹ Please use `linewidth` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.</code></pre>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a>x2_fig <span class="ot">&lt;-</span> <span class="fu">grid.arrange</span>(plot_resid_X2, qqplot_X2, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-21-1.png" width="960" /></p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">file.path</span>(X2_output_folder, <span class="st">&quot;residuals_vs_fitted_qqplot.pdf&quot;</span>), x2_fig, <span class="at">width =</span> <span class="dv">10</span>, <span class="at">height =</span> <span class="dv">4</span>)</span></code></pre></div>
+</div>
+<div id="x3" class="section level3">
+<h3>X3</h3>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a>X3_output_folder <span class="ot">&lt;-</span> <span class="fu">file.path</span>(slr_output_folder, <span class="st">&quot;X3&quot;</span>)</span>
+<span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a><span class="fu">dir.create</span>(X3_output_folder, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a><span class="co"># scatter plot</span></span>
+<span id="cb40-2"><a href="#cb40-2" tabindex="-1"></a>scatter_plot_path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(X3_output_folder, <span class="st">&quot;scatter_plot.pdf&quot;</span>)</span>
+<span id="cb40-3"><a href="#cb40-3" tabindex="-1"></a>scatter_plot_X3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> X3, <span class="at">y =</span> Y)) <span class="sc">+</span></span>
+<span id="cb40-4"><a href="#cb40-4" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb40-5"><a href="#cb40-5" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb40-6"><a href="#cb40-6" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Scatter Plot of Y vs. X3&quot;</span>, <span class="at">x =</span> <span class="st">&quot;X3&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Y&quot;</span>) <span class="sc">+</span></span>
+<span id="cb40-7"><a href="#cb40-7" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span>
+<span id="cb40-8"><a href="#cb40-8" tabindex="-1"></a><span class="fu">ggsave</span>(scatter_plot_path, scatter_plot_X3, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>)</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" tabindex="-1"></a>scatter_plot_X3</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-23-1.png" width="768" /></p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a>slr_X3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> X3, <span class="at">data =</span> data)</span>
+<span id="cb44-2"><a href="#cb44-2" tabindex="-1"></a><span class="fu">summary</span>(slr_X3)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = Y ~ X3, data = data)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -49.532 -23.161   0.716  20.602  61.334 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  71.4902     7.3225   9.763   &lt;2e-16 ***
+## X3            0.2803     0.2207   1.270    0.207    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 27.89 on 119 degrees of freedom
+## Multiple R-squared:  0.01337,    Adjusted R-squared:  0.00508 
+## F-statistic: 1.613 on 1 and 119 DF,  p-value: 0.2066</code></pre>
+</div>
+<div id="x4" class="section level3">
+<h3>X4</h3>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a>X4_output_folder <span class="ot">&lt;-</span> <span class="fu">file.path</span>(slr_output_folder, <span class="st">&quot;X4&quot;</span>)</span>
+<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a><span class="fu">dir.create</span>(X4_output_folder, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" tabindex="-1"></a><span class="co"># split data for X4 = 0 and X4 = 1</span></span>
+<span id="cb47-2"><a href="#cb47-2" tabindex="-1"></a>y_control <span class="ot">&lt;-</span> data[data<span class="sc">$</span>X4 <span class="sc">==</span> <span class="dv">1</span>, <span class="st">&quot;Y&quot;</span>]</span>
+<span id="cb47-3"><a href="#cb47-3" tabindex="-1"></a>y_no_control <span class="ot">&lt;-</span> data[data<span class="sc">$</span>X4 <span class="sc">==</span> <span class="dv">2</span>, <span class="st">&quot;Y&quot;</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a><span class="co"># plot the histograms for both groups in the same plot, length of the bins are not the same, so use density</span></span>
+<span id="cb48-2"><a href="#cb48-2" tabindex="-1"></a></span>
+<span id="cb48-3"><a href="#cb48-3" tabindex="-1"></a><span class="co"># Define a custom color palette</span></span>
+<span id="cb48-4"><a href="#cb48-4" tabindex="-1"></a>custom_colors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;#2E86AB&quot;</span>, <span class="st">&quot;#A23B72&quot;</span>)</span>
+<span id="cb48-5"><a href="#cb48-5" tabindex="-1"></a></span>
+<span id="cb48-6"><a href="#cb48-6" tabindex="-1"></a><span class="co"># Create enhanced histogram</span></span>
+<span id="cb48-7"><a href="#cb48-7" tabindex="-1"></a>histogram_path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(X4_output_folder, <span class="st">&quot;histogram.pdf&quot;</span>)</span>
+<span id="cb48-8"><a href="#cb48-8" tabindex="-1"></a>histogram_X4 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> Y, <span class="at">fill =</span> <span class="fu">factor</span>(X4))) <span class="sc">+</span></span>
+<span id="cb48-9"><a href="#cb48-9" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(</span>
+<span id="cb48-10"><a href="#cb48-10" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(density)),</span>
+<span id="cb48-11"><a href="#cb48-11" tabindex="-1"></a>    <span class="at">bins =</span> <span class="dv">30</span>,</span>
+<span id="cb48-12"><a href="#cb48-12" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.8</span>,</span>
+<span id="cb48-13"><a href="#cb48-13" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb48-14"><a href="#cb48-14" tabindex="-1"></a>    <span class="at">size =</span> <span class="fl">0.2</span></span>
+<span id="cb48-15"><a href="#cb48-15" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb48-16"><a href="#cb48-16" tabindex="-1"></a>  <span class="co"># Add density curve</span></span>
+<span id="cb48-17"><a href="#cb48-17" tabindex="-1"></a>  <span class="fu">geom_density</span>(</span>
+<span id="cb48-18"><a href="#cb48-18" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">factor</span>(X4)),</span>
+<span id="cb48-19"><a href="#cb48-19" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.2</span>,</span>
+<span id="cb48-20"><a href="#cb48-20" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">1</span></span>
+<span id="cb48-21"><a href="#cb48-21" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb48-22"><a href="#cb48-22" tabindex="-1"></a>  <span class="co"># Customize labels</span></span>
+<span id="cb48-23"><a href="#cb48-23" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb48-24"><a href="#cb48-24" tabindex="-1"></a>    <span class="at">title =</span> <span class="fu">TeX</span>(<span class="st">&quot;Distribution of $y&#39;$ across $x_4$&quot;</span>),</span>
+<span id="cb48-25"><a href="#cb48-25" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">TeX</span>(<span class="st">&quot;$y&#39; = </span><span class="sc">\\</span><span class="st">log^2 y$&quot;</span>),</span>
+<span id="cb48-26"><a href="#cb48-26" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Density&quot;</span>,</span>
+<span id="cb48-27"><a href="#cb48-27" tabindex="-1"></a>    <span class="at">fill =</span> <span class="fu">TeX</span>(<span class="st">&quot;Category $x_4$&quot;</span>),</span>
+<span id="cb48-28"><a href="#cb48-28" tabindex="-1"></a>    <span class="at">color =</span> <span class="fu">TeX</span>(<span class="st">&quot;Density Curve&quot;</span>)</span>
+<span id="cb48-29"><a href="#cb48-29" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb48-30"><a href="#cb48-30" tabindex="-1"></a>  <span class="co"># Apply custom theme</span></span>
+<span id="cb48-31"><a href="#cb48-31" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb48-32"><a href="#cb48-32" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb48-33"><a href="#cb48-33" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">16</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">b =</span> <span class="dv">10</span>)),</span>
+<span id="cb48-34"><a href="#cb48-34" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">b =</span> <span class="dv">20</span>)),</span>
+<span id="cb48-35"><a href="#cb48-35" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb48-36"><a href="#cb48-36" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
+<span id="cb48-37"><a href="#cb48-37" tabindex="-1"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb48-38"><a href="#cb48-38" tabindex="-1"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
+<span id="cb48-39"><a href="#cb48-39" tabindex="-1"></a>    <span class="at">legend.position =</span> <span class="st">&quot;right&quot;</span>,</span>
+<span id="cb48-40"><a href="#cb48-40" tabindex="-1"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb48-41"><a href="#cb48-41" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">&quot;gray90&quot;</span>),</span>
+<span id="cb48-42"><a href="#cb48-42" tabindex="-1"></a>    <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">&quot;white&quot;</span>, <span class="at">color =</span> <span class="cn">NA</span>),</span>
+<span id="cb48-43"><a href="#cb48-43" tabindex="-1"></a>    <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">&quot;white&quot;</span>, <span class="at">color =</span> <span class="cn">NA</span>)</span>
+<span id="cb48-44"><a href="#cb48-44" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb48-45"><a href="#cb48-45" tabindex="-1"></a>  <span class="co"># Apply custom colors</span></span>
+<span id="cb48-46"><a href="#cb48-46" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> custom_colors, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Control&quot;</span>, <span class="st">&quot;No Control&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb48-47"><a href="#cb48-47" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> custom_colors, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Control&quot;</span>, <span class="st">&quot;No Control&quot;</span>))</span>
+<span id="cb48-48"><a href="#cb48-48" tabindex="-1"></a></span>
+<span id="cb48-49"><a href="#cb48-49" tabindex="-1"></a></span>
+<span id="cb48-50"><a href="#cb48-50" tabindex="-1"></a><span class="co"># Save with higher resolution</span></span>
+<span id="cb48-51"><a href="#cb48-51" tabindex="-1"></a><span class="fu">ggsave</span>(</span>
+<span id="cb48-52"><a href="#cb48-52" tabindex="-1"></a>  histogram_path,</span>
+<span id="cb48-53"><a href="#cb48-53" tabindex="-1"></a>  histogram_X4,</span>
+<span id="cb48-54"><a href="#cb48-54" tabindex="-1"></a>  <span class="at">width =</span> <span class="dv">8</span>,</span>
+<span id="cb48-55"><a href="#cb48-55" tabindex="-1"></a>  <span class="at">height =</span> <span class="dv">4</span>,</span>
+<span id="cb48-56"><a href="#cb48-56" tabindex="-1"></a>)</span>
+<span id="cb48-57"><a href="#cb48-57" tabindex="-1"></a></span>
+<span id="cb48-58"><a href="#cb48-58" tabindex="-1"></a><span class="co"># Display plot</span></span>
+<span id="cb48-59"><a href="#cb48-59" tabindex="-1"></a>histogram_X4</span></code></pre></div>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-27-1.png" width="768" /></p>
+<p>We can build the model</p>
+<p><span class="math display">\[
+\begin{aligned}
+y&#39;_{ij} = \theta_i + \epsilon_{ij}, &amp;&amp; i \in \{1, 2\}, j \in
+\left\{1, \cdots, n_i\right\}, &amp;&amp; \epsilon_{ij}\sim
+\mathcal{N}\left(0, \sigma^2\right)
+\end{aligned}
+\]</span></p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a>theta_1 <span class="ot">&lt;-</span> <span class="fu">mean</span>(y_control)</span>
+<span id="cb49-2"><a href="#cb49-2" tabindex="-1"></a>theta_2 <span class="ot">&lt;-</span> <span class="fu">mean</span>(y_no_control)</span>
+<span id="cb49-3"><a href="#cb49-3" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;theta_1 = &quot;</span>, theta_1))</span></code></pre></div>
+<pre><code>## [1] &quot;theta_1 =  114.097822707391&quot;</code></pre>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">paste</span>(<span class="st">&quot;theta_2 = &quot;</span>, theta_2))</span></code></pre></div>
+<pre><code>## [1] &quot;theta_2 =  70.4815506087082&quot;</code></pre>
+<p>So</p>
+<p><span class="math display">\[
+\begin{cases}
+  \hat{\theta}_1 = \overline{y_{1\cdot}}\approx 114.10 \\
+  \hat{\theta}_2 = \overline{y_{2\cdot}}\approx 70.48
+\end{cases}
+\]</span></p>
+<p>We build ANOVA table</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" tabindex="-1"></a>group_y <span class="ot">&lt;-</span> <span class="fu">c</span>(y_control, y_no_control)</span>
+<span id="cb53-2"><a href="#cb53-2" tabindex="-1"></a>group <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;control&quot;</span>, <span class="st">&quot;no control&quot;</span>), <span class="fu">c</span>(<span class="fu">length</span>(y_control), <span class="fu">length</span>(y_no_control)))</span>
+<span id="cb53-3"><a href="#cb53-3" tabindex="-1"></a>)</span>
+<span id="cb53-4"><a href="#cb53-4" tabindex="-1"></a>anova_table <span class="ot">&lt;-</span> <span class="fu">aov</span>(group_y <span class="sc">~</span> group)</span>
+<span id="cb53-5"><a href="#cb53-5" tabindex="-1"></a><span class="fu">summary</span>(anova_table)</span></code></pre></div>
+<pre><code>##              Df Sum Sq Mean Sq F value   Pr(&gt;F)    
+## group         1  39903   39903   88.07 5.37e-16 ***
+## Residuals   119  53916     453                     
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p><span class="math inline">\(\mathcal{H}_0\)</span>: <span
+class="math inline">\(\mu_{\text{control}} \le \mu_{\text{no
+control}}\)</span></p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" tabindex="-1"></a><span class="fu">t.test</span>(y_control, y_no_control, <span class="at">alternative =</span> <span class="st">&quot;less&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  y_control and y_no_control
+## t = 10.406, df = 49.802, p-value = 1
+## alternative hypothesis: true difference in means is less than 0
+## 95 percent confidence interval:
+##      -Inf 50.64097
+## sample estimates:
+## mean of x mean of y 
+## 114.09782  70.48155</code></pre>
+</div>
+</div>
+<div id="multiple-linear-regression" class="section level2">
+<h2>Multiple Linear Regression</h2>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" tabindex="-1"></a>mlr_output_folder <span class="ot">&lt;-</span> <span class="fu">file.path</span>(image_folder, <span class="st">&quot;mlr&quot;</span>)</span>
+<span id="cb57-2"><a href="#cb57-2" tabindex="-1"></a><span class="fu">dir.create</span>(mlr_output_folder, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" tabindex="-1"></a>mlr <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> X1 <span class="sc">+</span> X2 <span class="sc">+</span> X3 <span class="sc">+</span> X4, <span class="at">data =</span> data)</span>
+<span id="cb58-2"><a href="#cb58-2" tabindex="-1"></a><span class="fu">summary</span>(mlr)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = Y ~ X1 + X2 + X3 + X4, data = data)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -40.951  -7.647   0.037   8.356  32.947 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  53.739163   9.265768   5.800 5.85e-08 ***
+## X1            0.036116   0.004247   8.503 7.38e-14 ***
+## X2           11.069106   1.241316   8.917 8.11e-15 ***
+## X3            0.018562   0.099140   0.187 0.851806    
+## X4          -13.241270   3.604210  -3.674 0.000363 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 12.2 on 116 degrees of freedom
+## Multiple R-squared:  0.8161, Adjusted R-squared:  0.8098 
+## F-statistic: 128.7 on 4 and 116 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" tabindex="-1"></a>predicted <span class="ot">&lt;-</span> <span class="fu">predict</span>(mlr, data[, <span class="fu">c</span>(<span class="st">&quot;X1&quot;</span>, <span class="st">&quot;X2&quot;</span>, <span class="st">&quot;X3&quot;</span>, <span class="st">&quot;X4&quot;</span>)])</span></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" tabindex="-1"></a><span class="co"># scatter plot y vs predicted values, no need to save</span></span>
+<span id="cb61-2"><a href="#cb61-2" tabindex="-1"></a><span class="fu">plot</span>(data<span class="sc">$</span>Y, predicted, <span class="at">col =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">main =</span> <span class="st">&quot;y vs predicted values&quot;</span>)</span>
+<span id="cb61-3"><a href="#cb61-3" tabindex="-1"></a><span class="co"># y=x</span></span>
+<span id="cb61-4"><a href="#cb61-4" tabindex="-1"></a><span class="fu">abline</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="at">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-34-1.png" width="480" /></p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" tabindex="-1"></a>plot_resid_mlr <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(</span>
+<span id="cb62-2"><a href="#cb62-2" tabindex="-1"></a>  <span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">fitted =</span> <span class="fu">fitted</span>(mlr), <span class="at">residuals =</span> <span class="fu">resid</span>(mlr)),</span>
+<span id="cb62-3"><a href="#cb62-3" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> fitted, <span class="at">y =</span> residuals)</span>
+<span id="cb62-4"><a href="#cb62-4" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb62-5"><a href="#cb62-5" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">&quot;#1f78b4&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb62-6"><a href="#cb62-6" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb62-7"><a href="#cb62-7" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Fitted values&quot;</span>,</span>
+<span id="cb62-8"><a href="#cb62-8" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Residuals&quot;</span>,</span>
+<span id="cb62-9"><a href="#cb62-9" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Residuals vs Fitted&quot;</span></span>
+<span id="cb62-10"><a href="#cb62-10" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb62-11"><a href="#cb62-11" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb62-12"><a href="#cb62-12" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_d</span>(<span class="at">option =</span> <span class="st">&quot;C&quot;</span>) <span class="sc">+</span></span>
+<span id="cb62-13"><a href="#cb62-13" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb62-14"><a href="#cb62-14" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb62-15"><a href="#cb62-15" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb62-16"><a href="#cb62-16" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb62-17"><a href="#cb62-17" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">&quot;gray&quot;</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>),</span>
+<span id="cb62-18"><a href="#cb62-18" tabindex="-1"></a>  )</span>
+<span id="cb62-19"><a href="#cb62-19" tabindex="-1"></a></span>
+<span id="cb62-20"><a href="#cb62-20" tabindex="-1"></a>qqplot_mlr <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">sample =</span> <span class="fu">resid</span>(mlr)), <span class="fu">aes</span>(<span class="at">sample =</span> sample)) <span class="sc">+</span></span>
+<span id="cb62-21"><a href="#cb62-21" tabindex="-1"></a>  <span class="fu">stat_qq</span>(<span class="at">color =</span> <span class="st">&quot;#1f78b4&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb62-22"><a href="#cb62-22" tabindex="-1"></a>  <span class="fu">stat_qq_line</span>(<span class="at">color =</span> <span class="st">&quot;#e31a1c&quot;</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb62-23"><a href="#cb62-23" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb62-24"><a href="#cb62-24" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;Theoretical Quantiles&quot;</span>,</span>
+<span id="cb62-25"><a href="#cb62-25" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;Sample Quantiles&quot;</span>,</span>
+<span id="cb62-26"><a href="#cb62-26" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">&quot;Normal Q-Q&quot;</span></span>
+<span id="cb62-27"><a href="#cb62-27" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb62-28"><a href="#cb62-28" tabindex="-1"></a>  <span class="fu">theme_classic</span>(<span class="at">base_size =</span> <span class="dv">12</span>) <span class="sc">+</span></span>
+<span id="cb62-29"><a href="#cb62-29" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb62-30"><a href="#cb62-30" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>, <span class="at">size =</span> <span class="dv">14</span>),</span>
+<span id="cb62-31"><a href="#cb62-31" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb62-32"><a href="#cb62-32" tabindex="-1"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">color =</span> <span class="st">&quot;gray&quot;</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>)</span>
+<span id="cb62-33"><a href="#cb62-33" tabindex="-1"></a>  )</span>
+<span id="cb62-34"><a href="#cb62-34" tabindex="-1"></a></span>
+<span id="cb62-35"><a href="#cb62-35" tabindex="-1"></a>mlr_res_fig <span class="ot">&lt;-</span> <span class="fu">grid.arrange</span>(plot_resid_mlr, qqplot_mlr, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-35-1.png" width="960" /></p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">file.path</span>(mlr_output_folder, <span class="st">&quot;residuals_vs_fitted_qqplot.pdf&quot;</span>), mlr_res_fig, <span class="at">width =</span> <span class="dv">10</span>, <span class="at">height =</span> <span class="dv">4</span>)</span></code></pre></div>
+</div>
+</div>
+
+   
+   
+            
+      
+
+  <script>
+    $(document).ready(function () {
+
+			
+ 		
+	    });
+  </script>
+
+
+
+    <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+	var script = document.createElement("script");
+	script.type = "text/javascript";
+	script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+	document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+  
+</body>
+</html>
