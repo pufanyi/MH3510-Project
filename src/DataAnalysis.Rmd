@@ -280,6 +280,12 @@ x1_fig <- grid.arrange(plot_resid_X1, qqplot_X1, ncol = 2)
 
 ggsave(file.path(X1_output_folder, "residuals_vs_fitted_qqplot.pdf"), x1_fig, width = 10, height = 4)
 ```
+
+```{r}
+aov <- anova(slr_X1)
+aov
+```
+
 ### X2
 
 ```{r}
@@ -547,3 +553,10 @@ mlr_res_fig <- grid.arrange(plot_resid_mlr, qqplot_mlr, ncol = 2)
 
 ggsave(file.path(mlr_output_folder, "residuals_vs_fitted_qqplot.pdf"), mlr_res_fig, width = 10, height = 4)
 ```
+
+## Prediction
+
+```{r}
+x_1
+```
+
