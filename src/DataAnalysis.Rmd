@@ -718,19 +718,19 @@ eliminate_x4_mlr <- lm(Y ~ X1 + X2 + X3, data = data)
 ```
 
 ```{r}
-anova(mlr, eliminate_x1_mlr)
+anova(eliminate_x1_mlr, mlr)
 ```
 
 ```{r}
-anova(mlr, eliminate_x2_mlr)
+anova(eliminate_x2_mlr, mlr)
 ```
 
 ```{r}
-anova(mlr, eliminate_x3_mlr)
+anova(eliminate_x3_mlr, mlr)
 ```
 
 ```{r}
-anova(mlr, eliminate_x4_mlr)
+anova(eliminate_x4_mlr, mlr)
 ```
 
 So we try to eliminate $X_3$.
@@ -748,7 +748,7 @@ predicted <- predict(mlr, data)
 ```
 
 ```{r, fig.width=5, fig.height=5}
-ggplot(data, aes(x = Y, y = predicted)) +
+plot <- ggplot(data, aes(x = Y, y = predicted)) +
   geom_point(color = "blue") +
   labs(title = "y vs predicted values") +
   geom_abline(intercept = 0, slope = 1, color = "red")
