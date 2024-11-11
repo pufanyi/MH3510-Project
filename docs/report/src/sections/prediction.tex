@@ -1,0 +1,42 @@
+\section{Prediction}
+
+% 就把他最后一个 predict 一下，然后算算 conf interval 应该就问题不大了
+
+\subsection{Point Estimation}
+
+From Equation \ref{eq:final_mlr}, we can get:
+\begin{equation}
+    \hat{y} = \exp{\sqrt[4]{\hat{\beta}_0 +\hat{\beta}_1 \sqrt{x_1} + \hat{\beta}_2 x_2 + \hat{\beta}_4 (2 - x_4)}}
+\end{equation}
+
+Substituting by
+\begin{equation}
+\begin{cases}
+x1 = 50000\\
+x2 = 3\\
+x3 = 60\\
+x4 = 2\\
+\end{cases}
+\end{equation}
+
+We can get
+\begin{equation}\label{eq:prediction}
+\hat{y}\approx 27379.73
+\end{equation}
+
+\subsection{Interval Estimation}
+
+We can get the $90\%$ confidence interval of $\hat{y}'$:
+\begin{equation}
+    (l', r') = (9329.20, 12468.89)
+\end{equation}
+
+So after doing the inverse function of Equation \ref{eq:trans_y_mlr}:
+\begin{equation}
+y = \exp\sqrt[4]{y'}
+\end{equation}
+
+We can get the $90\%$ confidence interval:
+\begin{equation}\label{eq:conf}
+    (l, r) = (18544.14, 38836.96)
+\end{equation}

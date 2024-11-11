@@ -1,6 +1,6 @@
 # MH3510 Project
 
-[Main Page](https://pufanyi.github.io/MH3510-Project/) / [Report](https://pufanyi.github.io/MH3510-Project/MH3510_Project.pdf) / [Code (html)](https://pufanyi.github.io/MH3510-Project/DataAnalysis) / [Code (pdf)](https://pufanyi.github.io/MH3510-Project/DataAnalysis.pdf)
+[Report](https://pufanyi.github.io/MH3510-Project/report/MH3510_Project.pdf) / [Code (html)](https://pufanyi.github.io/MH3510-Project/) / [Code (pdf)](https://pufanyi.github.io/MH3510-Project/index.pdf)
 
 In this study, we investigate factors affecting Annual Average Daily Traffic (AADT) on road section, using a dataset comprising five variables. We demonstrate our overall pipeline in the figure below. After inputting our data, we first observe its distribution. To address the skewness in some of the data, we applied transformations to the data.
 

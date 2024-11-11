@@ -1,0 +1,311 @@
+\section{Single Variable Regression Analysis}
+
+% 这个部分其实也不能叫 slr，所以我取了这样个名字。主要是第四个变量是二分类的。那就是前三个变量 slr 一下，然后最后一个就直接搞搞 anova 就行
+% 可能每个都要配凑一下 transformation
+% 图的话咱就这几个图：
+% 对于不 transformation 和 trans 的应该都要画，一个是 scatter plot，一个大图就行。然后还有就是 fit 之后 res plot 那图，用灰色画一下那个 eps
+% 然后每个可能都要做个 ANOVA
+
+\subsection{Population v.s. AADT}
+
+According to common sense, cities with larger populations should have more congested traffic. We attempt to use data to verify this hypothesis. 
+
+\subsubsection{Model Overview}
+
+By transforming \(x_1\) to \(\sqrt{x_1}\) and \(y\) to \(\log^2 y\), we ensured that potential non-linear relationships were better captured in the model.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/x1/scatter_plot}
+    \caption{Scatter plot of the model $y' = \beta_0^{(1)} +\beta_1^{(1)} x_1' + \epsilon$}
+    \label{fig:x1_scatter}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{figures/x1/residuals_vs_fitted_qqplot}
+    \caption{Residuals of the model $\hat{y'} = \hat{\beta}_0^{(1)} +\hat{\beta}_1^{(1)} x_1'$}
+    \label{fig:x1_res}
+\end{figure}
+
+We build a single linear regression model:
+\begin{equation}
+\begin{aligned}
+y' = \beta_0^{(1)} + \beta_1^{(1)} x_1' + \epsilon, && \epsilon\sim\mathcal{N}(0, \sigma_1^2)
+\end{aligned}
+\end{equation}
+
+%Figure \ref{fig:x1_res} % 写一下表示已经 insert 了，之后拿来直接用就行
+
+The model is fitted with the data in figure , with 
+\begin{equation}
+    \begin{cases}
+        \beta_0^{(1)}\approx 53.49\\
+        \beta_1^{(1)}\approx 0.064
+    \end{cases}
+\end{equation}
+
+This finding implies that larger county populations are associated with higher average annual daily traffic, which aligns with real-world expectations where more populated counties tend to have higher traffic volumes.
+
+\subsubsection{Residuals Analysis}
+
+We draw the residuals plot and QQ-plot in Figure \ref{fig:x1_res} to provide further insights into the model's adequacy.
+
+\paragraph{Residuals Plot} The residual plot in Figure \ref{fig:x1_res} shows a generally even distribution of residuals around zero, though there are some signs of non-constant variance. This pattern might indicate that variability in traffic increases with larger predicted values, potentially due to factors such as urban infrastructure or public transport usage that could influence traffic in larger counties.
+
+\paragraph{QQ-Plot} The QQ-plot of residuals shows that the residuals mostly follow a normal distribution, with minor deviations at the tails, suggesting that while the model performs well overall, there might be outliers or specific population segments where the prediction is less accurate.
+
+\subsubsection{Residual Statistics}
+
+\paragraph{ANOVA Table} We calculate the ANOVA table in Table \ref{tab:x1_anova}.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{l|l|l|l|l}
+    \toprule
+        \textbf{Source} & \textbf{df} & \textbf{SS} & \textbf{MS} & $\mathcal{F}$ \\
+        \midrule
+        Regression & $1$ & $\mathrm{SSR} = 43471$ & $\mathrm{MS}_{\mathrm{Reg}} = \mathrm{SSR} = 43471$ & \multirow{2}{*}{$F = \frac{\mathrm{MS}_{\mathrm{Reg}}}{s^2} \approx 102.75$} \\
+        Residual & $n - 2 = 119$ & $\mathrm{SSE} = 53916$ & $s^2 = \frac{\mathrm{SSE}}{n - 2} = 423$ & \\
+        \midrule
+        Total & $n - 1 = 120$ & $S_{yy} = 97387$ & & \\
+    \bottomrule
+    \end{tabular}
+    \caption{ANOVA table for the population with AADT.}
+    \label{tab:x1_anova}
+\end{table}
+
+Since $F$ value is in a $\mathcal{F}$ distribution:
+\begin{equation}\label{eq:f_test}
+    F = \frac{\mathrm{MS}_{\mathrm{Reg}}}{s^2}\sim \mathcal{F}_{1, n - 2}
+\end{equation}
+
+We can build $\mathcal{H}_0$: $\beta_1=0$ with $\mathcal{H}_1$: $\beta_1\neq 0$. And do $\mathcal{F}$-test by calculating the $p$ value:
+\begin{equation}
+    p = \mathbb{P}\left(\mathcal{F}_{1, 199} > F\right) < 2\times 10^{-16}
+\end{equation}
+
+The $p$ value is small enough for us to reject $\mathcal{H}_0$ and conclude that the population actually has a influence to AADT.
+
+\paragraph{$\mathcal{R}^2$ Statistic} The $\mathcal{R}^2$ statistic is calculated as
+\begin{equation}
+    \mathcal{R}^2=\frac{\mathrm{SSR}}{S_{yy}}\approx 0.4634
+\end{equation}
+
+This means that while there is some relation between population and AADT, there are other effectors that determine the AADT.
+
+\subsection{Number of Lanes v.s. AADT}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/x2/scatter_plot}
+    \caption{Scatter plot of the model $y' = \beta_0^{(2)} +\beta_1^{(2)} x_2' + \epsilon$}
+    \label{fig:x2_scatter}
+\end{figure}
+
+\subsubsection{Model Overview}
+
+The scatter plot Figure \ref{fig:x2_scatter} shows how AADT changes with the number of lanes. Each point represents a specific road section, with:
+\begin{itemize}
+    \item The $x$-axis representing the number of lanes.
+    \item The $y$-axis representing the AADT data after transformation.
+\end{itemize}
+
+In this plot, we also include a trendline to indicate the general pattern in the data.
+
+A positive slope in the trendline has been observed in the plot, which means that as the number of lanes increases, AADT tends to increase as well. This aligns with common sense: adding lanes generally allows a road to support more vehicles, which increases its traffic capacity.
+
+We construct the linear model for the responsible variable $y'$ and predicted variable $x_2$:
+\begin{equation}
+\begin{aligned}
+y' = \beta_0^{(2)} + \beta_1^{(2)} x_2 + \epsilon, && \epsilon\sim\mathcal{N}(0, \sigma_2^2)
+\end{aligned}
+\end{equation}
+
+We fitted the model with the data, shown as the red line in Figure \ref{fig:x2_scatter}:
+\begin{equation}
+\begin{cases}
+    \hat{\beta}_0^{(2)}\approx 25.304\\
+    \hat{\beta}_1^{(2)}\approx 17.718
+\end{cases}
+\end{equation}
+
+\paragraph{Intercept} When the number of lanes is zero, the model predicts $y'$ of approximately $25.3$. While this might not be meaningful practically (since we rarely see roads with zero lanes), it serves as a baseline.
+
+\paragraph{Slope for \(x_2\)} For each additional lane, the model predicts an increase of about $17.7$ in $y'$. This means adding lanes has a significant positive effect on traffic capacity.
+
+\paragraph{Significance} The very low $p$-value $\left(< 2\times 10^{-16}\right)$ for the number of lanes indicates that this relationship is statistically significant, implying that the number of lanes is an important factor in determining AADT.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{figures/x2/residuals_vs_fitted_qqplot}
+    \caption{Residuals of the model $\hat{y'} = \hat{\beta}_0^{(2)} +\hat{\beta}_1^{(2)} x_2$}
+    \label{fig:x2_res}
+\end{figure}
+
+\subsubsection{Residual Analysis}
+
+\paragraph{Residuals vs Fitted Plot} Figure \ref{fig:x2_res}  examines how well the linear model predicts AADT based on the number of lanes. If the residuals (the differences between actual and predicted AADT) are scattered randomly around the zero line, it indicates that the number of lanes effectively explains variations in AADT. In practical terms, this would mean that road sections with different lane counts generally show predictable changes in traffic volume, and our model captures this relationship well. However, if a pattern appears in the residuals, such as a consistent underestimation or overestimation of AADT for certain lane counts, it might suggest that factors beyond lane count (e.g., location, road type) are also influencing traffic volume, indicating that our model may need additional variables to improve accuracy.
+
+\paragraph{Normal Q-Q Plot} Refer to  Figure \ref{fig:x2_res}  again, it assesses whether the residuals are normally distributed, which is an assumption for linear regression. A normal distribution of residuals suggests that the relationship between lane count and AADT is generally well-captured by the linear model. If the points fall along a straight line in the Q-Q plot, it indicates that the model’s errors are random and unbiased, meaning our predictions are reasonably reliable across different lane counts. However, significant deviations from this line might indicate that the relationship between lane count and AADT isn’t fully linear or that other factors are affecting traffic volume in ways the model doesn’t capture, possibly warranting a more complex or adjusted model.
+
+\subsubsection{Residual Statistics}
+
+\paragraph{ANOVA Table} We calculate the ANOVA table in Table \ref{tab:x2_anova}.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{l|l|l|l|l}
+    \toprule
+        \textbf{Source} & \textbf{df} & \textbf{SS} & \textbf{MS} & $\mathcal{F}$ \\
+        \midrule
+        Regression & $1$ & $\mathrm{SSR} = 43471$ & $\mathrm{MS}_{\mathrm{Reg}} = \mathrm{SSR} = 43471$ & \multirow{2}{*}{$F = \frac{\mathrm{MS}_{\mathrm{Reg}}}{s^2} \approx 102.75$} \\
+        Residual & $n - 2 = 119$ & $\mathrm{SSE} = 53916$ & $s^2 = \frac{\mathrm{SSE}}{n - 2} = 423$ & \\
+        \midrule
+        Total & $n - 1 = 120$ & $S_{yy} = 97387$ & & \\
+    \bottomrule
+    \end{tabular}
+    \caption{ANOVA table for the population with AADT.}
+    \label{tab:x2_anova}
+\end{table}
+
+According to Equation \ref{eq:f_test}, we can build $\mathcal{H}_0$: $\beta_1=0$ with $\mathcal{H}_1$: $\beta_1\neq 0$. And do $\mathcal{F}$-test by calculating the $p$ value:
+\begin{equation}
+    p = \mathbb{P}\left(\mathcal{F}_{1, 199} > F\right) < 2\times 10^{-16}
+\end{equation}
+
+The $p$ value is small enough for us to reject $\mathcal{H}_0$ and conclude that the population actually has a influence to AADT.
+
+\paragraph{$\mathcal{R}^2$ Statistic} The $\mathcal{R}^2$ statistic is calculated as
+\begin{equation}
+    \mathcal{R}^2=\frac{\mathrm{SSR}}{S_{yy}}\approx 0.4634
+\end{equation}
+
+This means that while there is some relation between population and AADT, there are other effectors that determine the AADT.
+
+\subsubsection{Summary}
+This analysis shows that the number of lanes has a strong, positive effect on AADT. This makes intuitive sense, as wider roads with more lanes are better suited to handle larger volumes of traffic. The linear model and diagnostic plots suggest that the relationship is well captured by our model, with residuals generally behaving as expected.
+
+In summary, as we add more lanes to a road, we can expect an increase in daily traffic capacity, which matches our common-sense understanding of road infrastructure and traffic flow.
+
+\subsection{Road Width v.s. AADT}
+\subsubsection{Model Overview}
+
+We build the linear regression model
+\begin{equation}
+\begin{aligned}
+y' = \beta_0^{(3)} + \beta_1^{(3)} x_3 + \epsilon, && \epsilon\sim\mathcal{N}(0, \sigma_3^2)
+\end{aligned}
+\end{equation}
+
+The scatter plot in Figure \ref{fig:x3_scatter} shows the relationship between Annual Average Daily Traffic (AADT) and the width of road sections (in feet). Each point represents a specific road section, with:
+The x-axis represents the width of the road section in feet \(x_3\).
+The y-axis represents the AADT.
+
+In this plot, a trendline has been added to indicate the general pattern in the data. Although the trendline suggests a positive slope, indicating that as the road width increases, AADT tends to increase, this relationship is not statistically significant, as shown by the linear model. 
+
+
+\begin{itemize}
+
+\item \textbf{Intercept}: 71.49, which suggests that at a hypothetical width of zero, the model would predict an AADT of approximately 71.5, though this does not have practical meaning.
+
+\item \textbf{Slope for \(x_3\)}: 0.28, indicating a predicted increase in AADT of approximately 0.28 for each additional foot in road width. However, this effect is not statistically significant ($p$-value = 0.207), suggesting that road width does not significantly impact AADT in this model.
+\end{itemize}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{figures/x3/scatter_plot}
+    \caption{Residuals of the model $\hat{y'} = \hat{\beta}_0^{(3)} +\hat{\beta}_1^{(3)} x_3$}
+    \label{fig:x3_scatter}
+\end{figure}
+
+\subsubsection{Residual Statistics}
+
+\paragraph{ANOVA Table} We calculate the ANOVA table in Table \ref{tab:x3_anova}
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{l|l|l|l|l}
+    \toprule
+        \textbf{Source} & \textbf{df} & \textbf{SS} & \textbf{MS} & $\mathcal{F}$ \\
+        \midrule
+        Regression & $1$ & $\mathrm{SSR} =1254 $& $\mathrm{MS}_{\mathrm{Reg}} = \mathrm{SSR} = 1254.46$& \multirow{2}{*}{$F = \frac{\mathrm{MS}_{\mathrm{Reg}}}{s^2} \approx 1.6127$}\\
+        Residual & $n - 2 = 119$ & $\mathrm{SSE} = 92564$& $s^2 = \frac{\mathrm{SSE}}{n - 2} = 777.85$& \\
+        \midrule
+        Total & $n - 1 = 120$ & $S_{yy} = 93818$& & \\
+    \bottomrule
+    \end{tabular}
+    \caption{ANOVA table for the population with AADT.}
+    \label{tab:x3_anova}
+\end{table}
+
+\paragraph{$\mathcal{R}^2$ Statistic} The $\mathcal{R}^2$ statistic is calculated as
+\begin{equation}
+    \mathcal{R}^2=\frac{\mathrm{SSR}}{S_{yy}}\approx 0.013
+\end{equation}
+
+implies that road width explains only about 1.3\% of the variation in AADT, suggesting that other factors are more influential.
+
+\subsubsection{Summary}
+This analysis suggests that the width of a road section has a weak and statistically insignificant relationship with AADT. While wider roads generally allow for higher traffic volumes, this model does not capture that effect effectively. 
+
+
+\subsection{Whether to Control Access v.s. AADT}
+
+Controlling access to the road section is one of the important methods for improving traffic flow. In this chapter, we explore whether this approach can effectively increase the annual average daily traffic.
+
+We divide the data into two categories: the first category consists of data where control measures are implemented, and the second category consists of data without control measures. The distribution of these 2 categories is shown in Figure \ref{fig:x4_distribution}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{figures/x4/histogram.pdf}
+    \caption{Distribution of AADT over whether to control access.}
+    \label{fig:x4_distribution}
+\end{figure}
+
+We then establish a linear model:
+\begin{equation}
+\begin{aligned}
+y'_{ij} = \theta_i + \epsilon_{ij}, && i \in \{1, 2\}, j \in \left\{1, \cdots, n_i\right\}, && \epsilon_{ij}\sim \mathcal{N}\left(0, \sigma_4^2\right)
+\end{aligned}
+\end{equation}
+
+We can fit the model by
+\begin{equation}
+    \begin{cases}
+      \hat{\theta}_1 = \overline{y_{1\cdot}}\approx 114.10 \\
+      \hat{\theta}_2 = \overline{y_{2\cdot}}\approx 70.48
+    \end{cases}
+\end{equation}
+
+We are interested in whether these two categories have a significant difference. So we build $\mathcal{H}_0$: $\theta_1 = \theta_2$ versus $\mathcal{H}_1$: $\theta_1\neq\theta_2$, and we can build the ANOVA table, shown in Table \ref{tab:x4_anova}.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{l|l|l|l|l}
+    \toprule
+        \textbf{Source} & \textbf{df} & \textbf{SS} & \textbf{MS} & $\mathcal{F}$ \\
+        \midrule
+        Between groups & $k - 1 = 1$ & $\mathrm{SST} = 39903$ & $\mathrm{MST} = \frac{\mathrm{SST}}{k - 1} = 39903$ & \multirow{2}{*}{$F = \frac{\mathrm{MST}}{\mathrm{MSE}} \approx 88.07$} \\
+        Within groups & $n - k = 119$ & $\mathrm{SSE} = 53916$ & $\mathrm{MSE} = \frac{\mathrm{SSE}}{n - k} = 453$ & \\
+        \midrule
+        Total & $n - 1 = 120$ & $S_{yy} = 93819$ & & \\
+    \bottomrule
+    \end{tabular}
+    \caption{ANOVA table for whether to control access.}
+    \label{tab:x4_anova}
+\end{table}
+
+As
+\begin{equation}
+F = \frac{\mathrm{MST}}{\mathrm{MSE}} \sim \mathcal{F}_{1, 119}
+\end{equation}
+
+We can calculate $p$-value by:
+\begin{equation}
+p = \mathbb{P}\left(\mathcal{F}_{1, 199}>F\right)\approx 5.37\times 10^{-16}
+\end{equation}
+
+This is a quite small number, so we can conclude that there is a significant difference by controlling the access to the road section.
+
+% 其实这里按道理应该做一个 non-parametric test，but i have no time...

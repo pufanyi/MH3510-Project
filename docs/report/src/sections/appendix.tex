@@ -1,0 +1,79 @@
+\section{Code Snips}\label{appendix:key_code}
+
+The full code can be accessed in \url{https://pufanyi.github.io/MH3510-Project/}, here we listed some of the code snips.
+
+\subsection{Data Loading}
+
+\begin{lstlisting}
+file <- "../assets/aadt.txt"
+data_raw <- read.table(file, col.names = columns)
+data_ori <- data_raw[, c("Y", "X1", "X2", "X3", "X4")]
+\end{lstlisting}
+
+\subsection{Data Transformation}
+
+\begin{lstlisting}
+y_prime <- log(data$Y)^2
+x1_prime <- sqrt(data$X1)
+# ... Analysis code here
+data$Y <- log(data$Y)^2
+\end{lstlisting}
+
+\subsection{Single Linear Regression and Analysis}
+
+We take $x_1$ as an example
+
+\begin{lstlisting}
+slr_X1 <- lm(y_prime ~ x1_prime, data = data)
+summary(slr_X1)
+anova(slr_X1)
+\end{lstlisting}
+
+\subsection{Multiple Linear Regression}
+
+\begin{lstlisting}
+data$Y <- data$Y^2 # Further transformation
+data$X4 <- 2 - data$X4 # Dummy variable
+
+mlr <- lm(Y ~ X1 + X2 + X3 + X4, data = data)
+summary(mlr)
+
+# check adequecy
+eliminate_x1_mlr <- lm(Y ~ X2 + X3 + X4, data = data)
+anova(eliminate_x1_mlr, mlr)
+# ... check other variables
+
+# reduce model
+mlr <- eliminate_x3_mlr
+\end{lstlisting}
+
+\subsection{Estimation}\label{appendix:prediction}
+
+\begin{lstlisting}
+x1 <- 50000
+x2 <- 3
+x3 <- 60
+x4 <- 2
+
+# transformation
+x1 <- sqrt(x1)
+x4 <- 2 - x4
+
+# prediction
+input <- data.frame(X1 = x1, X2 = x2, X3 = x3, X4 = x4)
+y_hat <- predict(mlr, input)
+
+# transform back
+y_hat <- exp(y_hat^(1 / 4))
+
+# interval estimation
+alpha <- 0.1
+interval <- predict(mlr, input, interval = "confidence", 
+                    level = 1 - alpha)
+
+# transform back
+l <- exp(interval[2]^(1 / 4))
+r <- exp(interval[3]^(1 / 4))
+print(paste("(", l, ", ", r, ")"))
+\end{lstlisting}
+
