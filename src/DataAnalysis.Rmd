@@ -558,7 +558,8 @@ We calculate the p-value to be approximately 5.37 × 10⁻¹⁶. Since this valu
 
 ## Multiple Linear Regression
 
-As x4 is a classification variable, we create a dummy variable for it.
+As $x_4$ is a classification variable, we create a dummy variable for it.
+So that $x_4 = 1$ means we select the first class (control) and $x_4 = 0$ means we select the second class.
 
 ```{r}
 
@@ -630,6 +631,8 @@ ggsave(file.path(mlr_output_folder, "residuals_vs_fitted_qqplot.pdf"), mlr_res_f
 
 ### Adjusted Full Model
 
+Figure shows the model predictions and residuals. We observe that the $\sigma$ of the residuals depends on $y'$, indicating heteroscedasticity. Therefore, we need to adjust the transformation to make $\sigma$ constant.
+
 ```{r}
 data$Y <- data$Y^2
 ```
@@ -694,8 +697,18 @@ mlr_res_fig <- grid.arrange(plot_resid_mlr, qqplot_mlr, ncol = 2)
 
 ggsave(file.path(mlr_output_folder, "residuals_vs_fitted_qqplot_transformed.pdf"), mlr_res_fig, width = 10, height = 4)
 ```
+We succeed in the goal by doing the transformation
+$y' = \log^4 y$
+
+
+So The model becomes:
+\[
+\log^4 y = \beta_0 + \beta_1 \sqrt{x_1} + \beta_2 x_2 + \beta_3 x_3 + \beta_4 (2 - x_4) + \epsilon
+\]
 
 ### Adequacy of the model
+
+To check the adequacy of the model, we build an ANOVA / ANCOVA table for each variable. We can find that $x_1', x_2, x_4'$ have information with $y$, while $x_3$ can be removed as it have a great $p$-value.
 
 ```{r}
 eliminate_x1_mlr <- lm(Y ~ X2 + X3 + X4, data = data)
