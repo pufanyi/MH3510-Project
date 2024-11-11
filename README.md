@@ -10,9 +10,7 @@ After that, we conduct Single Linear Regression (SLR) analysis. We analyze and e
 
 Our final model can be demonstrates below.
 
-<div style="text-align: center;">
-    <img src="docs/imgs/model.png" alt="Model" style="width:50%;">
-</div>
+<img src="docs/imgs/model.png" alt="Model" style="display: block; margin: auto; width: 50%;">
 
 And the residual plot of our model is shown below.
 
