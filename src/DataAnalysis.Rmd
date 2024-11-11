@@ -254,7 +254,6 @@ plot_resid_X1 <- ggplot(
     title = "Residuals vs Fitted"
   ) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
-  geom_smooth(method = "loess", color = "red", size = 1) +
   scale_fill_viridis_d(option = "C") + # Changed to discrete scale
   theme_classic(base_size = 12) +
   theme(
