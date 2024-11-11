@@ -26,7 +26,7 @@ output:
     latex_engine: xelatex
 ---
 
-[Report](https://pufanyi.github.io/MH3510-Project/MH3510_Project.pdf) / [Code (html)](https://pufanyi.github.io/MH3510-Project/DataAnalysis) / [Code (pdf)](https://pufanyi.github.io/MH3510-Project/DataAnalysis.pdf) / [Github Repo](https://github.com/pufanyi/MH3510-Project)
+[Report](https://pufanyi.github.io/MH3510-Project/MH3510_Project.pdf) / [Code (html)](https://pufanyi.github.io/MH3510-Project/) / [Code (pdf)](https://pufanyi.github.io/MH3510-Project/index.pdf) / [Github Repo](https://github.com/pufanyi/MH3510-Project)
 
 # Setup and Load Data
 
