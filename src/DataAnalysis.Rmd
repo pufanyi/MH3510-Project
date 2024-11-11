@@ -1,23 +1,32 @@
 ---
-title: "DataAnalysis"
+title: "MH3510 Regression Analysis"
 author:
-  - Pu Fanyi
-  - Zhang Kaichen
-  - Shan Yi
-  - Fu Yilin
-  - Mu Yichen
+  - Pu Fanyi^[FPU001@e.ntu.edu.sg]
+  - Zhang Kaichen^[ZHAN0564@e.ntu.edu.sg]
+  - Shan Yi^[SH0005YI@e.ntu.edu.sg]
+  - Fu Yilin^[FUYI0005@e.ntu.edu.sg]
+  - Mu Yichen^[M220100@e.ntu.edu.sg]
 date: "`r Sys.Date()`"
 knit: (function(inputFile, encoding) {
       out_dir <- "../docs/";
       rmarkdown::render(inputFile,
                         encoding=encoding,
-                        output_dir=file.path(dirname(inputFile), out_dir));})
+                        output_dir=file.path(dirname(inputFile), out_dir));
+      rmarkdown::render(inputFile,
+                        encoding=encoding,
+                        output_dir=file.path(dirname(inputFile), out_dir),
+                        output_format = "pdf_document")})
 output:
   rmdformats::readthedown:
     self_contained: false
+    toc_depth: 3
+  pdf_document:
+    number_sections: true
+    fig_caption: true
+    latex_engine: xelatex
 ---
 
-## Setup and Load Data
+# Setup and Load Data
 
 ```{r setup, warning=FALSE, message=FALSE}
 library(ggplot2)
@@ -70,7 +79,7 @@ head(data)
 image_folder <- "../assets/images/"
 ```
 
-## Overview of the data
+# Overview of the data
 
 ```{r}
 overview_image_path <- file.path(image_folder, "overview")
@@ -80,25 +89,37 @@ dir.create(overview_image_path, showWarnings = FALSE)
 ```{r}
 # Create separate plots for each variable
 plot_Y <- ggplot(data, aes(x = Y)) +
-  geom_histogram(aes(y = after_stat(density)), fill = "lightblue", color = "black", bins = 30, alpha = 0.6) +
+  geom_histogram(aes(y = after_stat(density)),
+    fill = "lightblue",
+    color = "black", bins = 30, alpha = 0.6
+  ) +
   geom_density(color = "red", linewidth = 1) +
   labs(title = "Distribution of Y") +
   theme_minimal()
 
 plot_X1 <- ggplot(data, aes(x = X1)) +
-  geom_histogram(aes(y = after_stat(density)), fill = "lightblue", color = "black", bins = 30, alpha = 0.6) +
+  geom_histogram(aes(y = after_stat(density)),
+    fill = "lightblue",
+    color = "black", bins = 30, alpha = 0.6
+  ) +
   geom_density(color = "red", linewidth = 1) +
   labs(title = "Distribution of X1") +
   theme_minimal()
 
 plot_X2 <- ggplot(data, aes(x = X2)) +
-  geom_histogram(aes(y = after_stat(density)), fill = "lightblue", color = "black", bins = 30, alpha = 0.6) +
+  geom_histogram(aes(y = after_stat(density)),
+    fill = "lightblue",
+    color = "black", bins = 30, alpha = 0.6
+  ) +
   geom_density(color = "red", linewidth = 1) +
   labs(title = "Distribution of X2") +
   theme_minimal()
 
 plot_X3 <- ggplot(data, aes(x = X3)) +
-  geom_histogram(aes(y = after_stat(density)), fill = "lightblue", color = "black", bins = 30, alpha = 0.6) +
+  geom_histogram(aes(y = after_stat(density)),
+    fill = "lightblue",
+    color = "black", bins = 30, alpha = 0.6
+  ) +
   geom_density(color = "red", linewidth = 1) +
   labs(title = "Distribution of X3") +
   theme_minimal()
@@ -149,17 +170,26 @@ combined_plot <- grid.arrange(
   widths = c(3, 1)
 )
 
-combined_plot_image_path <- file.path(overview_image_path, "combined_histograms.pdf")
+combined_plot_image_path <- file.path(
+  overview_image_path,
+  "combined_histograms.pdf"
+)
 ggsave(combined_plot_image_path, combined_plot, width = 10, height = 5)
 ```
 
-## Graphic display of the observed data
+# Graphic display of the observed data
 
 ```{r}
 pdf(file.path(image_folder, "overview.pdf"), width = 10, height = 10)
 ggpairs(data,
-  upper = list(continuous = wrap("points", color = "blue", alpha = 0.5, size = 2)),
-  lower = list(continuous = wrap("points", color = "red", alpha = 0.5, size = 2)),
+  upper = list(continuous = wrap("points",
+    color = "blue",
+    alpha = 0.5, size = 2
+  )),
+  lower = list(continuous = wrap("points",
+    color = "red",
+    alpha = 0.5, size = 2
+  )),
   diag = list(continuous = wrap("densityDiag", fill = "lightblue"))
 )
 dev.off()
@@ -170,9 +200,15 @@ We let $y' = \log y$ to fix the skewness of the data.
 ```{r}
 y_prime <- log(data$Y)^2
 y_prime_fig <- ggplot(data.frame(y_prime), aes(x = y_prime)) +
-  geom_histogram(aes(y = after_stat(density)), fill = "lightblue", color = "black", bins = 30, alpha = 0.6) +
+  geom_histogram(aes(y = after_stat(density)),
+    fill = "lightblue",
+    color = "black", bins = 30, alpha = 0.6
+  ) +
   geom_density(color = "red", linewidth = 1) +
-  labs(title = TeX("Distribution of $y' = \\log^2y$"), x = TeX("$y' = \\log^2y$")) +
+  labs(
+    title = TeX("Distribution of $y' = \\log^2y$"),
+    x = TeX("$y' = \\log^2y$")
+  ) +
   theme_minimal()
 y_prime_fig
 ```
@@ -186,9 +222,15 @@ data$Y <- y_prime
 ```{r}
 x1_prime <- sqrt(data$X1)
 x1_prime_fig <- ggplot(data.frame(x1_prime), aes(x = x1_prime)) +
-  geom_histogram(aes(y = after_stat(density)), fill = "lightblue", color = "black", bins = 30, alpha = 0.6) +
+  geom_histogram(aes(y = after_stat(density)),
+    fill = "lightblue",
+    color = "black", bins = 30, alpha = 0.6
+  ) +
   geom_density(color = "red", linewidth = 1) +
-  labs(title = TeX("Distribution of $x_1' = \\sqrt{x_1}$"), x = TeX("$x_1'=\\sqrt{x_1}$")) +
+  labs(
+    title = TeX("Distribution of $x_1' = \\sqrt{x_1}$"),
+    x = TeX("$x_1'=\\sqrt{x_1}$")
+  ) +
   theme_minimal()
 x1_prime_fig
 ```
@@ -206,21 +248,24 @@ merged_graphs <- grid.arrange(
   widths = c(1, 1)
 )
 
-ggsave(file.path(overview_image_path, "transformed_variables.pdf"), merged_graphs, width = 8, height = 3)
+ggsave(file.path(overview_image_path, "transformed_variables.pdf"),
+  merged_graphs,
+  width = 8, height = 3
+)
 ```
 
 The distribution of $y'$ and $x_1'$, it can be seen that the distributions of $y'$ and $x_1'$ are relatively uniform compared with the original $y$ and $x_1$.
 
 Although $x_2$ and $x_3$ also have some skewness, considering that they are integers with a small range in the dataset, applying a transformation may not be useful. We have decided not to transform them for now.
 
-## Single Variable Analysis
+# Single Variable Analysis
 
 ```{r}
 slr_output_folder <- file.path(image_folder, "slr")
 dir.create(slr_output_folder, showWarnings = FALSE)
 ```
 
-### X1
+## X1
 
 ```{r}
 X1_output_folder <- file.path(slr_output_folder, "X1")
@@ -233,7 +278,10 @@ scatter_plot_path <- file.path(X1_output_folder, "scatter_plot.pdf")
 scatter_plot_X1 <- ggplot(data, aes(x = x1_prime, y = y_prime)) +
   geom_point(color = "blue") +
   geom_smooth(method = "lm", color = "red") +
-  labs(title = TeX("Scatter Plot of $y'$ vs. $x_1'$"), x = TeX("$x_1'=\\sqrt{x_1}$"), y = TeX("$y'=\\log^2 y$")) +
+  labs(
+    title = TeX("Scatter Plot of $y'$ vs. $x_1'$"),
+    x = TeX("$x_1'=\\sqrt{x_1}$"), y = TeX("$y'=\\log^2 y$")
+  ) +
   theme_minimal()
 ggsave(scatter_plot_path, scatter_plot_X1, width = 8, height = 6)
 scatter_plot_X1
@@ -269,7 +317,10 @@ plot_resid_X1 <- ggplot(
     panel.grid.major = element_line(color = "gray", linetype = "dashed"),
   )
 
-qqplot_X1 <- ggplot(data = data.frame(sample = resid(slr_X1)), aes(sample = sample)) +
+qqplot_X1 <- ggplot(
+  data = data.frame(sample = resid(slr_X1)),
+  aes(sample = sample)
+) +
   stat_qq(color = "#1f78b4", alpha = 0.6, size = 2) +
   stat_qq_line(color = "#e31a1c", linewidth = 1) +
   labs(
@@ -286,7 +337,10 @@ qqplot_X1 <- ggplot(data = data.frame(sample = resid(slr_X1)), aes(sample = samp
 
 x1_fig <- grid.arrange(plot_resid_X1, qqplot_X1, ncol = 2)
 
-ggsave(file.path(X1_output_folder, "residuals_vs_fitted_qqplot.pdf"), x1_fig, width = 10, height = 4)
+ggsave(file.path(X1_output_folder, "residuals_vs_fitted_qqplot.pdf"),
+  x1_fig,
+  width = 10, height = 4
+)
 ```
 
 The residual plot in Figure 5 shows a generally even distribution of residuals around zero, though there are some signs of non-constant variance. This pattern might indicate that variability in traffic increases with larger predicted values, potentially due to factors such as urban infrastructure or public transport usage that could influence traffic in larger counties.
@@ -302,7 +356,7 @@ Since the F value is in an F distribution, we conduct an F-test and obtain a p-v
 
 The $R^2$ statistic is calculated as approximately $0.4634$. This means that while there is some relationship between population and AADT, there are other factors that determine the AADT.
 
-### X2
+## X2
 
 The x-axis representing the number of lanes. The y-axis representing the AADT data after transformation.
 
@@ -363,7 +417,10 @@ plot_resid_X2 <- ggplot(
     panel.grid.major = element_line(color = "gray", linetype = "dashed"),
   )
 
-qqplot_X2 <- ggplot(data = data.frame(sample = resid(slr_X2)), aes(sample = sample)) +
+qqplot_X2 <- ggplot(
+  data = data.frame(sample = resid(slr_X2)),
+  aes(sample = sample)
+) +
   stat_qq(color = "#1f78b4", alpha = 0.6, size = 2) +
   stat_qq_line(color = "#e31a1c", size = 1) +
   labs(
@@ -380,7 +437,10 @@ qqplot_X2 <- ggplot(data = data.frame(sample = resid(slr_X2)), aes(sample = samp
 
 x2_fig <- grid.arrange(plot_resid_X2, qqplot_X2, ncol = 2)
 
-ggsave(file.path(X2_output_folder, "residuals_vs_fitted_qqplot.pdf"), x2_fig, width = 10, height = 4)
+ggsave(file.path(X2_output_folder, "residuals_vs_fitted_qqplot.pdf"),
+  x2_fig,
+  width = 10, height = 4
+)
 ```
 
 Residuals vs Fitted Plot The graph above examines how well the linear model predicts AADT based on the number of lanes. If the residuals (the differences between actual and predicted AADT) are scattered randomly around the zero line, it indicates that the number of lanes effectively explains variations in AADT. In practical terms, this would mean that road sections with different lane counts generally show predictable changes in traffic volume, and our model captures this relationship well. However, if a pattern appears in the residuals, such as a consistent underestimation or overestimation of AADT for certain lane counts, it might suggest that factors beyond lane count (e.g., location, road type) are also influencing traffic volume, indicating that our model may need additional variables to improve accuracy.
@@ -396,7 +456,6 @@ According to Equation 5, we can build $H_0: \beta_1 = 0$ and $H_1: \beta_1 \neq 
 
 The *p* value is small enough for us to reject $H_0$ and conclude that the population actually has an influence on AADT.
 
-$R^2$ Statistic\
 The $R^2$ statistic is calculated as approximately 0.4634.
 
 This means that while there is some relationship between population and AADT, there are other factors that determine AADT.
@@ -405,7 +464,7 @@ Summary
 
 This analysis shows that the number of lanes has a strong, positive effect on AADT. This makes intuitive sense, as wider roads with more lanes are better suited to handle larger volumes of traffic. The linear model and diagnostic plots suggest that the relationship is well captured by our model, with residuals generally behaving as expected. In summary, as we add more lanes to a road, we can expect an increase in daily traffic capacity, which matches our common-sense understanding of road infrastructure and traffic flow.
 
-### X3
+## X3
 
 ```{r}
 X3_output_folder <- file.path(slr_output_folder, "X3")
@@ -449,7 +508,7 @@ Summary
 
 This analysis suggests that the width of a road section has a weak and statistically insignificant relationship with AADT. While wider roads generally allow for higher traffic volumes, this model does not capture that effect effectively.
 
-### X4
+## X4
 
 Controlling access to the road section is one of the important methods for improving traffic flow. In this chapter, we explore whether this approach can effectively increase the annual average daily traffic. We divide the data into two categories: the first category consists of data where control measures are implemented, and the second category consists of data without control measures. The distribution of these 2 categories
 
@@ -465,12 +524,8 @@ y_no_control <- data[data$X4 == 2, "Y"]
 ```
 
 ```{r}
-# plot the histograms for both groups in the same plot, length of the bins are not the same, so use density
-
-# Define a custom color palette
 custom_colors <- c("#2E86AB", "#A23B72")
 
-# Create enhanced histogram
 histogram_path <- file.path(X4_output_folder, "histogram.pdf")
 histogram_X4 <- ggplot(data, aes(x = Y, fill = factor(X4))) +
   geom_histogram(
@@ -480,13 +535,11 @@ histogram_X4 <- ggplot(data, aes(x = Y, fill = factor(X4))) +
     color = "white",
     size = 0.2
   ) +
-  # Add density curve
   geom_density(
     aes(color = factor(X4)),
     alpha = 0.2,
     size = 1
   ) +
-  # Customize labels
   labs(
     title = TeX("Distribution of $y'$ across $x_4$"),
     x = TeX("$y' = \\log^2 y$"),
@@ -494,11 +547,16 @@ histogram_X4 <- ggplot(data, aes(x = Y, fill = factor(X4))) +
     fill = TeX("Category $x_4$"),
     color = TeX("Density Curve")
   ) +
-  # Apply custom theme
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 16, face = "bold", margin = margin(b = 10)),
-    plot.subtitle = element_text(size = 12, color = "gray50", margin = margin(b = 20)),
+    plot.title = element_text(
+      size = 16, face = "bold",
+      margin = margin(b = 10)
+    ),
+    plot.subtitle = element_text(
+      size = 12, color = "gray50",
+      margin = margin(b = 20)
+    ),
     axis.title = element_text(size = 12, face = "bold"),
     axis.text = element_text(size = 10),
     legend.title = element_text(size = 11, face = "bold"),
@@ -509,12 +567,10 @@ histogram_X4 <- ggplot(data, aes(x = Y, fill = factor(X4))) +
     plot.background = element_rect(fill = "white", color = NA),
     panel.background = element_rect(fill = "white", color = NA)
   ) +
-  # Apply custom colors
   scale_fill_manual(values = custom_colors, labels = c("Control", "No Control")) +
   scale_color_manual(values = custom_colors, labels = c("Control", "No Control"))
 
 
-# Save with higher resolution
 ggsave(
   histogram_path,
   histogram_X4,
@@ -522,7 +578,6 @@ ggsave(
   height = 4,
 )
 
-# Display plot
 histogram_X4
 ```
 
@@ -554,20 +609,22 @@ We build ANOVA table
 
 ```{r}
 group_y <- c(y_control, y_no_control)
-group <- factor(rep(c("control", "no control"), c(length(y_control), length(y_no_control))))
+group <- factor(rep(
+  c("control", "no control"),
+  c(length(y_control), length(y_no_control))
+))
 anova_table <- aov(group_y ~ group)
 summary(anova_table)
 ```
 
 We calculate the p-value to be approximately 5.37 × 10⁻¹⁶. Since this value is very small, we conclude that there is a significant difference by controlling access to the road section.
 
-## Multiple Linear Regression
+# Multiple Linear Regression
 
 As $x_4$ is a classification variable, we create a dummy variable for it.
 So that $x_4 = 1$ means we select the first class (control) and $x_4 = 0$ means we select the second class.
 
 ```{r}
-
 ### Full Model
 
 mlr_output_folder <- file.path(image_folder, "mlr")
@@ -589,7 +646,10 @@ plot <- ggplot(data, aes(x = Y, y = predicted)) +
   labs(title = "y vs predicted values") +
   geom_abline(intercept = 0, slope = 1, color = "red")
 
-file_path <- file.path(mlr_output_folder, "y_vs_predicted_values_full_model.pdf")
+file_path <- file.path(
+  mlr_output_folder,
+  "y_vs_predicted_values_full_model.pdf"
+)
 ggsave(file_path, plot, width = 5, height = 5)
 plot
 ```
@@ -614,7 +674,10 @@ plot_resid_mlr <- ggplot(
     panel.grid.major = element_line(color = "gray", linetype = "dashed"),
   )
 
-qqplot_mlr <- ggplot(data = data.frame(sample = resid(mlr)), aes(sample = sample)) +
+qqplot_mlr <- ggplot(
+  data = data.frame(sample = resid(mlr)),
+  aes(sample = sample)
+) +
   stat_qq(color = "#1f78b4", alpha = 0.6, size = 2) +
   stat_qq_line(color = "#e31a1c", size = 1) +
   labs(
@@ -631,10 +694,13 @@ qqplot_mlr <- ggplot(data = data.frame(sample = resid(mlr)), aes(sample = sample
 
 mlr_res_fig <- grid.arrange(plot_resid_mlr, qqplot_mlr, ncol = 2)
 
-ggsave(file.path(mlr_output_folder, "residuals_vs_fitted_qqplot.pdf"), mlr_res_fig, width = 10, height = 4)
+ggsave(file.path(mlr_output_folder, "residuals_vs_fitted_qqplot.pdf"),
+  mlr_res_fig,
+  width = 10, height = 4
+)
 ```
 
-### Adjusted Full Model
+## Adjusted Full Model
 
 Figure shows the model predictions and residuals. We observe that the $\sigma$ of the residuals depends on $y'$, indicating heteroscedasticity. Therefore, we need to adjust the transformation to make $\sigma$ constant.
 
@@ -683,7 +749,10 @@ plot_resid_mlr <- ggplot(
     panel.grid.major = element_line(color = "gray", linetype = "dashed"),
   )
 
-qqplot_mlr <- ggplot(data = data.frame(sample = resid(mlr)), aes(sample = sample)) +
+qqplot_mlr <- ggplot(
+  data = data.frame(sample = resid(mlr)),
+  aes(sample = sample)
+) +
   stat_qq(color = "#1f78b4", alpha = 0.6, size = 2) +
   stat_qq_line(color = "#e31a1c", size = 1) +
   labs(
@@ -700,7 +769,14 @@ qqplot_mlr <- ggplot(data = data.frame(sample = resid(mlr)), aes(sample = sample
 
 mlr_res_fig <- grid.arrange(plot_resid_mlr, qqplot_mlr, ncol = 2)
 
-ggsave(file.path(mlr_output_folder, "residuals_vs_fitted_qqplot_transformed.pdf"), mlr_res_fig, width = 10, height = 4)
+ggsave(
+  file.path(
+    mlr_output_folder,
+    "residuals_vs_fitted_qqplot_transformed.pdf"
+  ),
+  mlr_res_fig,
+  width = 10, height = 4
+)
 ```
 We succeed in the goal by doing the transformation
 $y' = \log^4 y$
@@ -711,7 +787,7 @@ So The model becomes:
 \log^4 y = \beta_0 + \beta_1 \sqrt{x_1} + \beta_2 x_2 + \beta_3 x_3 + \beta_4 (2 - x_4) + \epsilon
 \]
 
-### Adequacy of the model
+## Adequacy of the model
 
 To check the adequacy of the model, we build an ANOVA / ANCOVA table for each variable. We can find that $x_1', x_2, x_4'$ have information with $y$, while $x_3$ can be removed as it have a great $p$-value.
 
@@ -757,7 +833,10 @@ plot <- ggplot(data, aes(x = Y, y = predicted)) +
   geom_point(color = "blue") +
   labs(title = "y vs predicted values") +
   geom_abline(intercept = 0, slope = 1, color = "red")
-file_path <- file.path(mlr_output_folder, "y_vs_predicted_values_reduced_model.pdf")
+file_path <- file.path(
+  mlr_output_folder,
+  "y_vs_predicted_values_reduced_model.pdf"
+)
 ggsave(file_path, plot, width = 5, height = 5)
 plot
 ```
@@ -782,7 +861,10 @@ plot_resid_mlr <- ggplot(
     panel.grid.major = element_line(color = "gray", linetype = "dashed"),
   )
 
-qqplot_mlr <- ggplot(data = data.frame(sample = resid(mlr)), aes(sample = sample)) +
+qqplot_mlr <- ggplot(
+  data = data.frame(sample = resid(mlr)),
+  aes(sample = sample)
+) +
   stat_qq(color = "#1f78b4", alpha = 0.6, size = 2) +
   stat_qq_line(color = "#e31a1c", size = 1) +
   labs(
@@ -799,12 +881,15 @@ qqplot_mlr <- ggplot(data = data.frame(sample = resid(mlr)), aes(sample = sample
 
 mlr_res_fig <- grid.arrange(plot_resid_mlr, qqplot_mlr, ncol = 2)
 
-ggsave(file.path(mlr_output_folder, "reduced_residuals_vs_fitted_qqplot.pdf"), mlr_res_fig, width = 10, height = 4)
+ggsave(file.path(mlr_output_folder, "reduced_residuals_vs_fitted_qqplot.pdf"),
+  mlr_res_fig,
+  width = 10, height = 4
+)
 ```
 
-## Prediction
+# Prediction
 
-### Data
+## Data
 
 ```{r}
 x1 <- 50000
@@ -827,7 +912,7 @@ x1 <- sqrt(x1)
 x4 <- 2 - x4
 ```
 
-### Point Estimation
+## Point Estimation
 
 ```{r}
 y_hat <- predict(mlr, data.frame(X1 = x1, X2 = x2, X3 = x3, X4 = x4))
@@ -838,7 +923,7 @@ y_hat
 ```
 
 ```{r}
-exp(y_hat ^ (1/4))
+exp(y_hat^(1 / 4))
 ```
 
 We transform back
@@ -848,25 +933,27 @@ $$
 $$
 
 ```{r}
-y_hat <- exp(y_hat ^ (1/4))
+y_hat <- exp(y_hat^(1 / 4))
 ```
 
 ```{r}
 y_hat
 ```
 
-### Interval Estimation
+## Interval Estimation
 
 Let's try to get the 90% interval
 
 ```{r}
 alpha <- 0.1
-interval <- predict(mlr, data.frame(X1 = x1, X2 = x2, X3 = x3, X4 = x4), interval = "confidence", level = 1 - alpha)
+interval <- predict(mlr, data.frame(X1 = x1, X2 = x2, X3 = x3, X4 = x4),
+  interval = "confidence", level = 1 - alpha
+)
 interval
 ```
 
 ```{r}
-l <- exp(interval[2] ^ (1/4))
-r <- exp(interval[3] ^ (1/4))
+l <- exp(interval[2]^(1 / 4))
+r <- exp(interval[3]^(1 / 4))
 print(paste("(", l, ", ", r, ")"))
 ```
