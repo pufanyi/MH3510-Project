@@ -6,7 +6,7 @@ author:
   - Shan Yi^[SH0005YI@e.ntu.edu.sg]
   - Fu Yilin^[FUYI0005@e.ntu.edu.sg]
   - Mu Yichen^[M220100@e.ntu.edu.sg]
-date: "`r Sys.Date()`"
+date: "2024-11-11"
 knit: (function(inputFile, encoding) {
       out_dir <- "../docs/";
       rmarkdown::render(inputFile,
