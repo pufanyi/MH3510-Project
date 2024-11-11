@@ -204,7 +204,9 @@ merged_graphs <- grid.arrange(
 
 ggsave(file.path(overview_image_path, "transformed_variables.pdf"), merged_graphs, width = 8, height = 3)
 ```
+The distribution of $y'$ and $x_1'$, it can be seen that the distributions of $y'$ and $x_1'$ are relatively uniform compared with the original $y$ and $x_1$.
 
+Although $x_2$ and $x_3$ also have some skewness, considering that they are integers with a small range in the dataset, applying a transformation may not be useful. We have decided not to transform them for now.
 
 ## Single Variable Analysis
 
@@ -238,6 +240,7 @@ slr_X1 <- lm(y_prime ~ x1_prime, data = data)
 summary(slr_X1)
 ```
 
+We draw the residuals plot and QQ-plot to provide further insights into the model’s adequacy.
 
 ```{r fig.width=10, fig.height=4}
 # Create the main plot with the residuals
@@ -254,7 +257,6 @@ plot_resid_X1 <- ggplot(
     title = "Residuals vs Fitted"
   ) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
-  geom_smooth(method = "loess", color = "red", size = 1) +
   scale_fill_viridis_d(option = "C") + # Changed to discrete scale
   theme_classic(base_size = 12) +
   theme(
@@ -283,10 +285,18 @@ x1_fig <- grid.arrange(plot_resid_X1, qqplot_X1, ncol = 2)
 ggsave(file.path(X1_output_folder, "residuals_vs_fitted_qqplot.pdf"), x1_fig, width = 10, height = 4)
 ```
 
+The residual plot in Figure 5 shows a generally even distribution of residuals around zero, though there are some signs of non-constant variance. This pattern might indicate that variability in traffic increases with larger predicted values, potentially due to factors such as urban infrastructure or public transport usage that could influence traffic in larger counties.
+
+The QQ-plot of residuals shows that the residuals mostly follow a normal distribution, with minor deviations at the tails, suggesting that while the model performs well overall, there might be outliers or specific population segments where the prediction is less accurate.
+
 ```{r}
 aov <- anova(slr_X1)
 aov
 ```
+
+Since the F value is in an F distribution, we conduct an F-test and obtain a p-value of less than $2 \times 10^{-16}$. The p-value is small enough for us to reject $H_0$ and conclude that the population actually has an influence on AADT.
+
+The $R^2$ statistic is calculated as approximately $0.4634$. This means that while there is some relationship between population and AADT, there are other factors that determine the AADT.
 
 ### X2
 
@@ -643,7 +653,7 @@ qqplot_mlr <- ggplot(data = data.frame(sample = resid(mlr)), aes(sample = sample
 
 mlr_res_fig <- grid.arrange(plot_resid_mlr, qqplot_mlr, ncol = 2)
 
-ggsave(file.path(mlr_output_folder, "residuals_vs_fitted_qqplot.pdf"), mlr_res_fig, width = 10, height = 4)
+ggsave(file.path(mlr_output_folder, "residuals_vs_fitted_qqplot_transformed.pdf"), mlr_res_fig, width = 10, height = 4)
 ```
 
 ### Adequacy of the model
@@ -804,4 +814,3 @@ l <- exp(interval[2] ^ (1/4))
 r <- exp(interval[3] ^ (1/4))
 print(paste("(", l, ", ", r, ")"))
 ```
-
