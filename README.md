@@ -10,8 +10,8 @@ After that, we conduct Single Linear Regression (SLR) analysis. We analyze and e
 
 Our final model can be demonstrates below.
 
-![](imgs/model.png)
+![](docs/imgs/model.png)
 
 And the residual plot of our model is shown below.
 
-![](imgs/residuals.png)
+![](docs/imgs/residuals.png)
