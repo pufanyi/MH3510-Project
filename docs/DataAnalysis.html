@@ -864,7 +864,7 @@ y&#39;_{ij} = \theta_i + \epsilon_{ij}, &amp;&amp; i \in \{1, 2\}, j \in
 <span id="cb74-34"><a href="#cb74-34" tabindex="-1"></a></span>
 <span id="cb74-35"><a href="#cb74-35" tabindex="-1"></a>mlr_res_fig <span class="ot">&lt;-</span> <span class="fu">grid.arrange</span>(plot_resid_mlr, qqplot_mlr, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="DataAnalysis_files/figure-html/unnamed-chunk-43-1.png" width="960" /></p>
-<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">file.path</span>(mlr_output_folder, <span class="st">&quot;residuals_vs_fitted_qqplot.pdf&quot;</span>), mlr_res_fig, <span class="at">width =</span> <span class="dv">10</span>, <span class="at">height =</span> <span class="dv">4</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">file.path</span>(mlr_output_folder, <span class="st">&quot;residuals_vs_fitted_qqplot_transformed.pdf&quot;</span>), mlr_res_fig, <span class="at">width =</span> <span class="dv">10</span>, <span class="at">height =</span> <span class="dv">4</span>)</span></code></pre></div>
 </div>
 <div id="adequacy-of-the-model" class="section level3">
 <h3>Adequacy of the model</h3>

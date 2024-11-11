@@ -642,7 +642,7 @@ qqplot_mlr <- ggplot(data = data.frame(sample = resid(mlr)), aes(sample = sample
 
 mlr_res_fig <- grid.arrange(plot_resid_mlr, qqplot_mlr, ncol = 2)
 
-ggsave(file.path(mlr_output_folder, "residuals_vs_fitted_qqplot.pdf"), mlr_res_fig, width = 10, height = 4)
+ggsave(file.path(mlr_output_folder, "residuals_vs_fitted_qqplot_transformed.pdf"), mlr_res_fig, width = 10, height = 4)
 ```
 
 ### Adequacy of the model
