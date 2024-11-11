@@ -6,6 +6,10 @@
     <meta name="generator" content="pandoc" />
 
         <meta name="author" content="Pu Fanyi" />
+        <meta name="author" content="Zhang Kaichen" />
+        <meta name="author" content="Shan Yi" />
+        <meta name="author" content="Fu Yilin" />
+        <meta name="author" content="Mu Yichen" />
     
         <meta name="date" content="2024-11-11" />
     
@@ -210,6 +214,14 @@
     <div id="postamble" data-toggle="wy-nav-shift" class="status">
                   <p class="author"><span class="glyphicon glyphicon-user"></span> Pu
 Fanyi</p>
+                        <p class="author"><span class="glyphicon glyphicon-user"></span> Zhang
+Kaichen</p>
+                        <p class="author"><span class="glyphicon glyphicon-user"></span> Shan
+Yi</p>
+                        <p class="author"><span class="glyphicon glyphicon-user"></span> Fu
+Yilin</p>
+                        <p class="author"><span class="glyphicon glyphicon-user"></span> Mu
+Yichen</p>
                         <p class="date"><span class="glyphicon glyphicon-calendar"></span> 2024-11-11</p>
           </div>
    </div>
@@ -513,8 +525,16 @@ are other factors that determine the AADT.</p>
 </div>
 <div id="x2" class="section level3">
 <h3>X2</h3>
+<p>The x-axis representing the number of lanes. The y-axis representing
+the AADT data after transformation.</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a>X2_output_folder <span class="ot">&lt;-</span> <span class="fu">file.path</span>(slr_output_folder, <span class="st">&quot;X2&quot;</span>)</span>
 <span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a><span class="fu">dir.create</span>(X2_output_folder, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p>In this plot, we also include a trendline to indicate the general
+pattern in the data. A positive slope in the trendline has been ovserved
+in the plot, which means that as the number of lanes increases, AADT
+tends to increase as well. This aligns with common sense: adding lanes
+generally allows a road to support more vehicles, which increases its
+traffic capacity.</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="co"># scatter plot</span></span>
 <span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a>scatter_plot_path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(X2_output_folder, <span class="st">&quot;scatter_plot.pdf&quot;</span>)</span>
 <span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a>scatter_plot_X2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> X2, <span class="at">y =</span> Y)) <span class="sc">+</span></span>
@@ -547,6 +567,21 @@ are other factors that determine the AADT.</p>
 ## Residual standard error: 15.92 on 119 degrees of freedom
 ## Multiple R-squared:  0.6786, Adjusted R-squared:  0.6759 
 ## F-statistic: 251.3 on 1 and 119 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p><strong>Intercept</strong><br />
+When the number of lanes is zero, the model predicts <span
+class="math inline">\(y&#39;\)</span> of approximately 25.3. While this
+might not be meaningful practically (since we rarely see roads with zero
+lanes), it serves as a baseline.</p>
+<p><strong>Slope for</strong> <span
+class="math inline">\(x_2\)</span><br />
+For each additional lane, the model predicts an increase of about 17.7
+in <span class="math inline">\(y&#39;\)</span>. This means adding lanes
+has a significant positive effect on traffic capacity.</p>
+<p><strong>Significance</strong><br />
+The very low <em>p</em>-value (<span class="math inline">\(&lt; 2 \times
+10^{-16}\)</span>) for the number of lanes indicates that this
+relationship is statistically significant, implying that the number of
+lanes is an important factor in determining AADT.</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a><span class="co"># Create the main plot with the residuals</span></span>
 <span id="cb37-2"><a href="#cb37-2" tabindex="-1"></a>plot_resid_X2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(</span>
 <span id="cb37-3"><a href="#cb37-3" tabindex="-1"></a>  <span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">fitted =</span> <span class="fu">fitted</span>(slr_X2), <span class="at">residuals =</span> <span class="fu">resid</span>(slr_X2)),</span>
@@ -592,6 +627,29 @@ are other factors that determine the AADT.</p>
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a>x2_fig <span class="ot">&lt;-</span> <span class="fu">grid.arrange</span>(plot_resid_X2, qqplot_X2, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="DataAnalysis_files/figure-html/unnamed-chunk-22-1.png" width="960" /></p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">file.path</span>(X2_output_folder, <span class="st">&quot;residuals_vs_fitted_qqplot.pdf&quot;</span>), x2_fig, <span class="at">width =</span> <span class="dv">10</span>, <span class="at">height =</span> <span class="dv">4</span>)</span></code></pre></div>
+<p>Residuals vs Fitted Plot The graph above examines how well the linear
+model predicts AADT based on the number of lanes. If the residuals (the
+differences between actual and predicted AADT) are scattered randomly
+around the zero line, it indicates that the number of lanes effectively
+explains variations in AADT. In practical terms, this would mean that
+road sections with different lane counts generally show predictable
+changes in traffic volume, and our model captures this relationship
+well. However, if a pattern appears in the residuals, such as a
+consistent underestimation or overestimation of AADT for certain lane
+counts, it might suggest that factors beyond lane count (e.g., location,
+road type) are also influencing traffic volume, indicating that our
+model may need additional variables to improve accuracy.</p>
+<p>Normal QQ-Ploy it assesses whether the residuals are normally
+distributed, which is an assumption for linear regression. A normal
+distribution of residuals suggests that the relationship between lane
+count and AADT is generally well-captured by the linear model. If the
+points fall along a straight line in the Q-Q plot, it indicates that the
+model’s errors are random and unbiased, meaning our predictions are
+reasonably reliable across different lane counts. However, significant
+deviations from this line might indicate that the relationship between
+lane count and AADT isn’t fully linear or that other factors are
+affecting traffic volume in ways the model doesn’t capture, possibly
+warranting a more complex or adjusted model.</p>
 <div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a>aov <span class="ot">&lt;-</span> <span class="fu">anova</span>(slr_X2)</span>
 <span id="cb41-2"><a href="#cb41-2" tabindex="-1"></a>aov</span></code></pre></div>
 <pre><code>## Analysis of Variance Table
@@ -602,6 +660,27 @@ are other factors that determine the AADT.</p>
 ## Residuals 119  30153     253                      
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>According to Equation 5, we can build <span
+class="math inline">\(H_0: \beta_1 = 0\)</span> and <span
+class="math inline">\(H_1: \beta_1 \neq 0\)</span>. We conduct an F-test
+by calculating the <em>p</em> value.</p>
+<p>The <em>p</em> value is small enough for us to reject <span
+class="math inline">\(H_0\)</span> and conclude that the population
+actually has an influence on AADT.</p>
+<p><span class="math inline">\(R^2\)</span> Statistic<br />
+The <span class="math inline">\(R^2\)</span> statistic is calculated as
+approximately 0.4634.</p>
+<p>This means that while there is some relationship between population
+and AADT, there are other factors that determine AADT.</p>
+<p>Summary</p>
+<p>This analysis shows that the number of lanes has a strong, positive
+effect on AADT. This makes intuitive sense, as wider roads with more
+lanes are better suited to handle larger volumes of traffic. The linear
+model and diagnostic plots suggest that the relationship is well
+captured by our model, with residuals generally behaving as expected. In
+summary, as we add more lanes to a road, we can expect an increase in
+daily traffic capacity, which matches our common-sense understanding of
+road infrastructure and traffic flow.</p>
 </div>
 <div id="x3" class="section level3">
 <h3>X3</h3>
@@ -619,6 +698,16 @@ are other factors that determine the AADT.</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a>scatter_plot_X3</span></code></pre></div>
 <pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="DataAnalysis_files/figure-html/unnamed-chunk-25-1.png" width="768" /></p>
+<p>The scatter plot shows the relationship between Annual Average Daily
+Traffic (AADT) and the width of road sections (in feet). Each point
+represents a specific road section, with: The x-axis represents the
+width of the road section in feet x3. The y-axis represents the
+AADT.</p>
+<p>In this plot, a trendline has been added to indicate the general
+pattern in the data. Although the trendline suggests a positive slope,
+indicating that as the road width increases, AADT tends to increase,
+this relationship is not statistically significant, as shown by the
+linear model.</p>
 <div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a>slr_X3 <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> X3, <span class="at">data =</span> data)</span>
 <span id="cb48-2"><a href="#cb48-2" tabindex="-1"></a><span class="fu">summary</span>(slr_X3)</span></code></pre></div>
 <pre><code>## 
@@ -639,6 +728,13 @@ are other factors that determine the AADT.</p>
 ## Residual standard error: 27.89 on 119 degrees of freedom
 ## Multiple R-squared:  0.01337,    Adjusted R-squared:  0.00508 
 ## F-statistic: 1.613 on 1 and 119 DF,  p-value: 0.2066</code></pre>
+<p>Intercept: 71.49, which suggests that at a hypothetical width of
+zero, the model would predict an AADT of approximately 71.5, though this
+does not have practical meaning.</p>
+<p>Slope for x3: 0.28, indicating a predicted increase in AADT of
+approximately 0.28 for each additional foot in road width. However, this
+effect is not statistically significant (p-value = 0.207), suggesting
+that road width does not significantly impact AADT in this model.</p>
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a>aov <span class="ot">&lt;-</span> <span class="fu">anova</span>(slr_X3)</span>
 <span id="cb50-2"><a href="#cb50-2" tabindex="-1"></a>aov</span></code></pre></div>
 <pre><code>## Analysis of Variance Table
@@ -647,9 +743,25 @@ are other factors that determine the AADT.</p>
 ##            Df Sum Sq Mean Sq F value Pr(&gt;F)
 ## X3          1   1254 1254.46  1.6127 0.2066
 ## Residuals 119  92564  777.85</code></pre>
+<p><strong>R² Statistic</strong><br />
+The R² statistic is approximately 0.013, implying that road width
+explains only about 1.3% of the variation in AADT, suggesting that other
+factors are more influential.</p>
+<p>Summary</p>
+<p>This analysis suggests that the width of a road section has a weak
+and statistically insignificant relationship with AADT. While wider
+roads generally allow for higher traffic volumes, this model does not
+capture that effect effectively.</p>
 </div>
 <div id="x4" class="section level3">
 <h3>X4</h3>
+<p>Controlling access to the road section is one of the important
+methods for improving traffic flow. In this chapter, we explore whether
+this approach can effectively increase the annual average daily traffic.
+We divide the data into two categories: the first category consists of
+data where control measures are implemented, and the second category
+consists of data without control measures. The distribution of these 2
+categories</p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" tabindex="-1"></a>X4_output_folder <span class="ot">&lt;-</span> <span class="fu">file.path</span>(slr_output_folder, <span class="st">&quot;X4&quot;</span>)</span>
 <span id="cb52-2"><a href="#cb52-2" tabindex="-1"></a><span class="fu">dir.create</span>(X4_output_folder, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" tabindex="-1"></a><span class="co"># split data for X4 = 0 and X4 = 1</span></span>
@@ -746,14 +858,22 @@ y&#39;_{ij} = \theta_i + \epsilon_{ij}, &amp;&amp; i \in \{1, 2\}, j \in
 ## Residuals   119  53916     453                     
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>We calculate the p-value to be approximately 5.37 × 10⁻¹⁶. Since this
+value is very small, we conclude that there is a significant difference
+by controlling access to the road section.</p>
 </div>
 </div>
 <div id="multiple-linear-regression" class="section level2">
 <h2>Multiple Linear Regression</h2>
-<div id="full-model" class="section level3">
-<h3>Full Model</h3>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" tabindex="-1"></a>mlr_output_folder <span class="ot">&lt;-</span> <span class="fu">file.path</span>(image_folder, <span class="st">&quot;mlr&quot;</span>)</span>
-<span id="cb61-2"><a href="#cb61-2" tabindex="-1"></a><span class="fu">dir.create</span>(mlr_output_folder, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p>As <span class="math inline">\(x_4\)</span> is a classification
+variable, we create a dummy variable for it. So that <span
+class="math inline">\(x_4 = 1\)</span> means we select the first class
+(control) and <span class="math inline">\(x_4 = 0\)</span> means we
+select the second class.</p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" tabindex="-1"></a><span class="do">### Full Model</span></span>
+<span id="cb61-2"><a href="#cb61-2" tabindex="-1"></a></span>
+<span id="cb61-3"><a href="#cb61-3" tabindex="-1"></a>mlr_output_folder <span class="ot">&lt;-</span> <span class="fu">file.path</span>(image_folder, <span class="st">&quot;mlr&quot;</span>)</span>
+<span id="cb61-4"><a href="#cb61-4" tabindex="-1"></a><span class="fu">dir.create</span>(mlr_output_folder, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" tabindex="-1"></a>mlr <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> X1 <span class="sc">+</span> X2 <span class="sc">+</span> X3 <span class="sc">+</span> X4, <span class="at">data =</span> data)</span>
 <span id="cb62-2"><a href="#cb62-2" tabindex="-1"></a><span class="fu">summary</span>(mlr)</span></code></pre></div>
 <pre><code>## 
@@ -778,15 +898,14 @@ y&#39;_{ij} = \theta_i + \epsilon_{ij}, &amp;&amp; i \in \{1, 2\}, j \in
 ## Multiple R-squared:  0.8161, Adjusted R-squared:  0.8098 
 ## F-statistic: 128.7 on 4 and 116 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" tabindex="-1"></a>predicted <span class="ot">&lt;-</span> <span class="fu">predict</span>(mlr, data[, <span class="fu">c</span>(<span class="st">&quot;X1&quot;</span>, <span class="st">&quot;X2&quot;</span>, <span class="st">&quot;X3&quot;</span>, <span class="st">&quot;X4&quot;</span>)])</span></code></pre></div>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" tabindex="-1"></a><span class="co"># plot(data$Y, predicted, col = &quot;blue&quot;, main = &quot;y vs predicted values&quot;)</span></span>
-<span id="cb65-2"><a href="#cb65-2" tabindex="-1"></a>plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> Y, <span class="at">y =</span> predicted)) <span class="sc">+</span></span>
-<span id="cb65-3"><a href="#cb65-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
-<span id="cb65-4"><a href="#cb65-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;y vs predicted values&quot;</span>) <span class="sc">+</span></span>
-<span id="cb65-5"><a href="#cb65-5" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>)</span>
-<span id="cb65-6"><a href="#cb65-6" tabindex="-1"></a></span>
-<span id="cb65-7"><a href="#cb65-7" tabindex="-1"></a>file_path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(mlr_output_folder, <span class="st">&quot;y_vs_predicted_values_full_model.pdf&quot;</span>)</span>
-<span id="cb65-8"><a href="#cb65-8" tabindex="-1"></a><span class="fu">ggsave</span>(file_path, plot, <span class="at">width =</span> <span class="dv">5</span>, <span class="at">height =</span> <span class="dv">5</span>)</span>
-<span id="cb65-9"><a href="#cb65-9" tabindex="-1"></a>plot</span></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" tabindex="-1"></a>plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> Y, <span class="at">y =</span> predicted)) <span class="sc">+</span></span>
+<span id="cb65-2"><a href="#cb65-2" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb65-3"><a href="#cb65-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;y vs predicted values&quot;</span>) <span class="sc">+</span></span>
+<span id="cb65-4"><a href="#cb65-4" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>)</span>
+<span id="cb65-5"><a href="#cb65-5" tabindex="-1"></a></span>
+<span id="cb65-6"><a href="#cb65-6" tabindex="-1"></a>file_path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(mlr_output_folder, <span class="st">&quot;y_vs_predicted_values_full_model.pdf&quot;</span>)</span>
+<span id="cb65-7"><a href="#cb65-7" tabindex="-1"></a><span class="fu">ggsave</span>(file_path, plot, <span class="at">width =</span> <span class="dv">5</span>, <span class="at">height =</span> <span class="dv">5</span>)</span>
+<span id="cb65-8"><a href="#cb65-8" tabindex="-1"></a>plot</span></code></pre></div>
 <p><img src="DataAnalysis_files/figure-html/unnamed-chunk-36-1.png" width="480" /></p>
 <div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" tabindex="-1"></a>plot_resid_mlr <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(</span>
 <span id="cb66-2"><a href="#cb66-2" tabindex="-1"></a>  <span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">fitted =</span> <span class="fu">fitted</span>(mlr), <span class="at">residuals =</span> <span class="fu">resid</span>(mlr)),</span>
@@ -825,9 +944,13 @@ y&#39;_{ij} = \theta_i + \epsilon_{ij}, &amp;&amp; i \in \{1, 2\}, j \in
 <span id="cb66-35"><a href="#cb66-35" tabindex="-1"></a>mlr_res_fig <span class="ot">&lt;-</span> <span class="fu">grid.arrange</span>(plot_resid_mlr, qqplot_mlr, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="DataAnalysis_files/figure-html/unnamed-chunk-37-1.png" width="960" /></p>
 <div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">file.path</span>(mlr_output_folder, <span class="st">&quot;residuals_vs_fitted_qqplot.pdf&quot;</span>), mlr_res_fig, <span class="at">width =</span> <span class="dv">10</span>, <span class="at">height =</span> <span class="dv">4</span>)</span></code></pre></div>
-</div>
 <div id="adjusted-full-model" class="section level3">
 <h3>Adjusted Full Model</h3>
+<p>Figure shows the model predictions and residuals. We observe that the
+<span class="math inline">\(\sigma\)</span> of the residuals depends on
+<span class="math inline">\(y&#39;\)</span>, indicating
+heteroscedasticity. Therefore, we need to adjust the transformation to
+make <span class="math inline">\(\sigma\)</span> constant.</p>
 <div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" tabindex="-1"></a>data<span class="sc">$</span>Y <span class="ot">&lt;-</span> data<span class="sc">$</span>Y<span class="sc">^</span><span class="dv">2</span></span></code></pre></div>
 <div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" tabindex="-1"></a>mlr_output_folder <span class="ot">&lt;-</span> <span class="fu">file.path</span>(image_folder, <span class="st">&quot;mlr&quot;</span>)</span>
 <span id="cb69-2"><a href="#cb69-2" tabindex="-1"></a><span class="fu">dir.create</span>(mlr_output_folder, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
@@ -897,49 +1020,61 @@ y&#39;_{ij} = \theta_i + \epsilon_{ij}, &amp;&amp; i \in \{1, 2\}, j \in
 <span id="cb74-35"><a href="#cb74-35" tabindex="-1"></a>mlr_res_fig <span class="ot">&lt;-</span> <span class="fu">grid.arrange</span>(plot_resid_mlr, qqplot_mlr, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p><img src="DataAnalysis_files/figure-html/unnamed-chunk-43-1.png" width="960" /></p>
 <div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">file.path</span>(mlr_output_folder, <span class="st">&quot;residuals_vs_fitted_qqplot_transformed.pdf&quot;</span>), mlr_res_fig, <span class="at">width =</span> <span class="dv">10</span>, <span class="at">height =</span> <span class="dv">4</span>)</span></code></pre></div>
+<p>We succeed in the goal by doing the transformation <span
+class="math inline">\(y&#39; = \log^4 y\)</span></p>
+<p>So The model becomes: <span class="math display">\[
+\log^4 y = \beta_0 + \beta_1 \sqrt{x_1} + \beta_2 x_2 + \beta_3 x_3 +
+\beta_4 (2 - x_4) + \epsilon
+\]</span></p>
 </div>
 <div id="adequacy-of-the-model" class="section level3">
 <h3>Adequacy of the model</h3>
+<p>To check the adequacy of the model, we build an ANOVA / ANCOVA table
+for each variable. We can find that <span
+class="math inline">\(x_1&#39;, x_2, x_4&#39;\)</span> have information
+with <span class="math inline">\(y\)</span>, while <span
+class="math inline">\(x_3\)</span> can be removed as it have a great
+<span class="math inline">\(p\)</span>-value.</p>
 <div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" tabindex="-1"></a>eliminate_x1_mlr <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> X2 <span class="sc">+</span> X3 <span class="sc">+</span> X4, <span class="at">data =</span> data)</span>
 <span id="cb76-2"><a href="#cb76-2" tabindex="-1"></a>eliminate_x2_mlr <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> X1 <span class="sc">+</span> X3 <span class="sc">+</span> X4, <span class="at">data =</span> data)</span>
 <span id="cb76-3"><a href="#cb76-3" tabindex="-1"></a>eliminate_x3_mlr <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> X1 <span class="sc">+</span> X2 <span class="sc">+</span> X4, <span class="at">data =</span> data)</span>
 <span id="cb76-4"><a href="#cb76-4" tabindex="-1"></a>eliminate_x4_mlr <span class="ot">&lt;-</span> <span class="fu">lm</span>(Y <span class="sc">~</span> X1 <span class="sc">+</span> X2 <span class="sc">+</span> X3, <span class="at">data =</span> data)</span></code></pre></div>
-<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" tabindex="-1"></a><span class="fu">anova</span>(mlr, eliminate_x1_mlr)</span></code></pre></div>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" tabindex="-1"></a><span class="fu">anova</span>(eliminate_x1_mlr, mlr)</span></code></pre></div>
 <pre><code>## Analysis of Variance Table
 ## 
-## Model 1: Y ~ X1 + X2 + X3 + X4
-## Model 2: Y ~ X2 + X3 + X4
-##   Res.Df       RSS Df  Sum of Sq      F    Pr(&gt;F)    
-## 1    116 365252858                                   
-## 2    117 679542372 -1 -314289514 99.815 &lt; 2.2e-16 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" tabindex="-1"></a><span class="fu">anova</span>(mlr, eliminate_x2_mlr)</span></code></pre></div>
-<pre><code>## Analysis of Variance Table
-## 
-## Model 1: Y ~ X1 + X2 + X3 + X4
-## Model 2: Y ~ X1 + X3 + X4
-##   Res.Df       RSS Df  Sum of Sq      F    Pr(&gt;F)    
-## 1    116 365252858                                   
-## 2    117 680342805 -1 -315089947 100.07 &lt; 2.2e-16 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" tabindex="-1"></a><span class="fu">anova</span>(mlr, eliminate_x3_mlr)</span></code></pre></div>
-<pre><code>## Analysis of Variance Table
-## 
-## Model 1: Y ~ X1 + X2 + X3 + X4
-## Model 2: Y ~ X1 + X2 + X4
-##   Res.Df       RSS Df Sum of Sq      F Pr(&gt;F)
-## 1    116 365252858                           
-## 2    117 365429973 -1   -177115 0.0562 0.8129</code></pre>
-<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" tabindex="-1"></a><span class="fu">anova</span>(mlr, eliminate_x4_mlr)</span></code></pre></div>
-<pre><code>## Analysis of Variance Table
-## 
-## Model 1: Y ~ X1 + X2 + X3 + X4
-## Model 2: Y ~ X1 + X2 + X3
+## Model 1: Y ~ X2 + X3 + X4
+## Model 2: Y ~ X1 + X2 + X3 + X4
 ##   Res.Df       RSS Df Sum of Sq      F    Pr(&gt;F)    
-## 1    116 365252858                                  
-## 2    117 459976649 -1 -94723791 30.083 2.457e-07 ***
+## 1    117 679542372                                  
+## 2    116 365252858  1 314289514 99.815 &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" tabindex="-1"></a><span class="fu">anova</span>(eliminate_x2_mlr, mlr)</span></code></pre></div>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: Y ~ X1 + X3 + X4
+## Model 2: Y ~ X1 + X2 + X3 + X4
+##   Res.Df       RSS Df Sum of Sq      F    Pr(&gt;F)    
+## 1    117 680342805                                  
+## 2    116 365252858  1 315089947 100.07 &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" tabindex="-1"></a><span class="fu">anova</span>(eliminate_x3_mlr, mlr)</span></code></pre></div>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: Y ~ X1 + X2 + X4
+## Model 2: Y ~ X1 + X2 + X3 + X4
+##   Res.Df       RSS Df Sum of Sq      F Pr(&gt;F)
+## 1    117 365429973                           
+## 2    116 365252858  1    177115 0.0562 0.8129</code></pre>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" tabindex="-1"></a><span class="fu">anova</span>(eliminate_x4_mlr, mlr)</span></code></pre></div>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: Y ~ X1 + X2 + X3
+## Model 2: Y ~ X1 + X2 + X3 + X4
+##   Res.Df       RSS Df Sum of Sq      F    Pr(&gt;F)    
+## 1    117 459976649                                  
+## 2    116 365252858  1  94723791 30.083 2.457e-07 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>So we try to eliminate <span class="math inline">\(X_3\)</span>.</p>
@@ -966,11 +1101,10 @@ y&#39;_{ij} = \theta_i + \epsilon_{ij}, &amp;&amp; i \in \{1, 2\}, j \in
 ## Multiple R-squared:  0.8644, Adjusted R-squared:  0.8609 
 ## F-statistic: 248.6 on 3 and 117 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" tabindex="-1"></a>predicted <span class="ot">&lt;-</span> <span class="fu">predict</span>(mlr, data)</span></code></pre></div>
-<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" tabindex="-1"></a><span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> Y, <span class="at">y =</span> predicted)) <span class="sc">+</span></span>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" tabindex="-1"></a>plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> Y, <span class="at">y =</span> predicted)) <span class="sc">+</span></span>
 <span id="cb89-2"><a href="#cb89-2" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
 <span id="cb89-3"><a href="#cb89-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;y vs predicted values&quot;</span>) <span class="sc">+</span></span>
 <span id="cb89-4"><a href="#cb89-4" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">slope =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
-<p><img src="DataAnalysis_files/figure-html/unnamed-chunk-52-1.png" width="480" /></p>
 <div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" tabindex="-1"></a>plot_resid_mlr <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(</span>
 <span id="cb90-2"><a href="#cb90-2" tabindex="-1"></a>  <span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">fitted =</span> <span class="fu">fitted</span>(mlr), <span class="at">residuals =</span> <span class="fu">resid</span>(mlr)),</span>
 <span id="cb90-3"><a href="#cb90-3" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> fitted, <span class="at">y =</span> residuals)</span>

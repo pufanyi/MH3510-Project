@@ -1,6 +1,11 @@
 ---
 title: "DataAnalysis"
-author: Pu Fanyi
+author:
+  - Pu Fanyi
+  - Zhang Kaichen
+  - Shan Yi
+  - Fu Yilin
+  - Mu Yichen
 date: "`r Sys.Date()`"
 knit: (function(inputFile, encoding) {
       out_dir <- "../docs/";
