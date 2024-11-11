@@ -623,6 +623,8 @@ We calculate the p-value to be approximately 5.37 × 10⁻¹⁶. Since this valu
 
 # Multiple Linear Regression
 
+## Full Model
+
 As $x_4$ is a classification variable, we create a dummy variable for it.
 So that $x_4 = 1$ means we select the first class (control) and $x_4 = 0$ means we select the second class.
 
