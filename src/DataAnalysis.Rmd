@@ -757,6 +757,9 @@ plot <- ggplot(data, aes(x = Y, y = predicted)) +
   geom_point(color = "blue") +
   labs(title = "y vs predicted values") +
   geom_abline(intercept = 0, slope = 1, color = "red")
+file_path <- file.path(mlr_output_folder, "y_vs_predicted_values_reduced_model.pdf")
+ggsave(file_path, plot, width = 5, height = 5)
+plot
 ```
 
 ```{r fig.width=10, fig.height=4}
