@@ -532,7 +532,6 @@ predicted <- predict(mlr, data[, c("X1", "X2", "X3", "X4")])
 ```
 
 ```{r, fig.width=5, fig.height=5}
-# plot(data$Y, predicted, col = "blue", main = "y vs predicted values")
 plot <- ggplot(data, aes(x = Y, y = predicted)) +
   geom_point(color = "blue") +
   labs(title = "y vs predicted values") +
