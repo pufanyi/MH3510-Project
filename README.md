@@ -8,7 +8,7 @@ In this study, we investigate factors affecting Annual Average Daily Traffic (AA
 
 After that, we conduct Single Linear Regression (SLR) analysis. We analyze and explain the influence of each variable on the response variable in detail through this approach. In parallel, we also perform Multiple Linear Regression (MLR) analysis to get the more precise model. For variables found to be significant, we proceed to use them for prediction.
 
-Our final model can be demonstrates below.
+Our final model can demonstrates below.
 
 <img src="docs/imgs/model.png" alt="Model" style="display: block; margin: auto; width: 50%;">
 
