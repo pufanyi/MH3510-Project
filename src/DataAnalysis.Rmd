@@ -56,7 +56,8 @@ columns <- c("Y", "X1", "X2", "X3", "X4", "X5", "X6", "X7")
 ```{r}
 file <- "../assets/aadt.txt"
 data_raw <- read.table(file, col.names = columns)
-data <- data_raw[, c("Y", "X1", "X2", "X3", "X4")]
+data_ori <- data_raw[, c("Y", "X1", "X2", "X3", "X4")]
+data <- data_ori
 head(data)
 ```
 
@@ -353,6 +354,12 @@ x2_fig <- grid.arrange(plot_resid_X2, qqplot_X2, ncol = 2)
 ggsave(file.path(X2_output_folder, "residuals_vs_fitted_qqplot.pdf"), x2_fig, width = 10, height = 4)
 ```
 
+```{r}
+aov <- anova(slr_X2)
+aov
+```
+
+
 ### X3
 
 ```{r}
@@ -376,6 +383,12 @@ scatter_plot_X3
 slr_X3 <- lm(Y ~ X3, data = data)
 summary(slr_X3)
 ```
+
+```{r}
+aov <- anova(slr_X3)
+aov
+```
+
 
 ### X4
 
@@ -483,13 +496,14 @@ We build ANOVA table
 
 ```{r}
 group_y <- c(y_control, y_no_control)
-group <- factor(rep(c("control", "no control"), c(length(y_control), length(y_no_control)))
-)
+group <- factor(rep(c("control", "no control"), c(length(y_control), length(y_no_control))))
 anova_table <- aov(group_y ~ group)
 summary(anova_table)
 ```
 
 ## Multiple Linear Regression
+
+### Full Model
 
 ```{r}
 mlr_output_folder <- file.path(image_folder, "mlr")
@@ -506,9 +520,7 @@ predicted <- predict(mlr, data[, c("X1", "X2", "X3", "X4")])
 ```
 
 ```{r, fig.width=5, fig.height=5}
-# scatter plot y vs predicted values, no need to save
 plot(data$Y, predicted, col = "blue", main = "y vs predicted values")
-# y=x
 abline(0, 1, col = "red")
 ```
 
@@ -554,9 +566,223 @@ mlr_res_fig <- grid.arrange(plot_resid_mlr, qqplot_mlr, ncol = 2)
 ggsave(file.path(mlr_output_folder, "residuals_vs_fitted_qqplot.pdf"), mlr_res_fig, width = 10, height = 4)
 ```
 
-## Prediction
+
+### Adjusted Full Model
 
 ```{r}
-x_1
+data$Y <- data$Y^2
 ```
+
+
+```{r}
+mlr_output_folder <- file.path(image_folder, "mlr")
+dir.create(mlr_output_folder, showWarnings = FALSE)
+```
+
+```{r}
+mlr <- lm(Y ~ X1 + X2 + X3 + X4, data = data)
+summary(mlr)
+```
+
+```{r}
+predicted <- predict(mlr, data[, c("X1", "X2", "X3", "X4")])
+```
+
+```{r, fig.width=5, fig.height=5}
+plot(data$Y, predicted, col = "blue", main = "y vs predicted values")
+abline(0, 1, col = "red")
+```
+
+
+
+```{r fig.width=10, fig.height=4}
+plot_resid_mlr <- ggplot(
+  data = data.frame(fitted = fitted(mlr), residuals = resid(mlr)),
+  aes(x = fitted, y = residuals)
+) +
+  geom_point(color = "#1f78b4", alpha = 0.6, size = 2) +
+  labs(
+    x = "Fitted values",
+    y = "Residuals",
+    title = "Residuals vs Fitted"
+  ) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+  scale_fill_viridis_d(option = "C") +
+  theme_classic(base_size = 12) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    axis.title = element_text(size = 12),
+    panel.grid.major = element_line(color = "gray", linetype = "dashed"),
+  )
+
+qqplot_mlr <- ggplot(data = data.frame(sample = resid(mlr)), aes(sample = sample)) +
+  stat_qq(color = "#1f78b4", alpha = 0.6, size = 2) +
+  stat_qq_line(color = "#e31a1c", size = 1) +
+  labs(
+    x = "Theoretical Quantiles",
+    y = "Sample Quantiles",
+    title = "Normal Q-Q"
+  ) +
+  theme_classic(base_size = 12) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    axis.title = element_text(size = 12),
+    panel.grid.major = element_line(color = "gray", linetype = "dashed")
+  )
+
+mlr_res_fig <- grid.arrange(plot_resid_mlr, qqplot_mlr, ncol = 2)
+
+ggsave(file.path(mlr_output_folder, "residuals_vs_fitted_qqplot.pdf"), mlr_res_fig, width = 10, height = 4)
+```
+
+### Adequacy of the model
+
+
+```{r}
+eliminate_x1_mlr <- lm(Y ~ X2 + X3 + X4, data = data)
+eliminate_x2_mlr <- lm(Y ~ X1 + X3 + X4, data = data)
+eliminate_x3_mlr <- lm(Y ~ X1 + X2 + X4, data = data)
+eliminate_x4_mlr <- lm(Y ~ X1 + X2 + X3, data = data)
+```
+
+```{r}
+anova(mlr, eliminate_x1_mlr)
+```
+
+```{r}
+anova(mlr, eliminate_x2_mlr)
+```
+
+```{r}
+anova(mlr, eliminate_x3_mlr)
+```
+
+
+```{r}
+anova(mlr, eliminate_x4_mlr)
+```
+
+So we try to eliminate $X_3$.
+
+```{r}
+mlr <- eliminate_x3_mlr
+```
+
+```{r}
+summary(mlr)
+```
+
+```{r}
+predicted <- predict(mlr, data)
+```
+
+```{r, fig.width=5, fig.height=5}
+plot(data$Y, predicted, col = "blue", main = "y vs predicted values")
+abline(0, 1, col = "red")
+```
+
+
+
+```{r fig.width=10, fig.height=4}
+plot_resid_mlr <- ggplot(
+  data = data.frame(fitted = fitted(mlr), residuals = resid(mlr)),
+  aes(x = fitted, y = residuals)
+) +
+  geom_point(color = "#1f78b4", alpha = 0.6, size = 2) +
+  labs(
+    x = "Fitted values",
+    y = "Residuals",
+    title = "Residuals vs Fitted"
+  ) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+  scale_fill_viridis_d(option = "C") +
+  theme_classic(base_size = 12) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    axis.title = element_text(size = 12),
+    panel.grid.major = element_line(color = "gray", linetype = "dashed"),
+  )
+
+qqplot_mlr <- ggplot(data = data.frame(sample = resid(mlr)), aes(sample = sample)) +
+  stat_qq(color = "#1f78b4", alpha = 0.6, size = 2) +
+  stat_qq_line(color = "#e31a1c", size = 1) +
+  labs(
+    x = "Theoretical Quantiles",
+    y = "Sample Quantiles",
+    title = "Normal Q-Q"
+  ) +
+  theme_classic(base_size = 12) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
+    axis.title = element_text(size = 12),
+    panel.grid.major = element_line(color = "gray", linetype = "dashed")
+  )
+
+mlr_res_fig <- grid.arrange(plot_resid_mlr, qqplot_mlr, ncol = 2)
+
+ggsave(file.path(mlr_output_folder, "reduced_residuals_vs_fitted_qqplot.pdf"), mlr_res_fig, width = 10, height = 4)
+```
+
+## Prediction
+
+### Data
+
+```{r}
+x1 <- 50000
+x2 <- 3
+x3 <- 60
+x4 <- 2
+```
+
+Then we do transformation for every values:
+
+$$
+\begin{cases}
+x_1' = \sqrt{x_1} \\
+x_4' = 2 - x_4
+\end{cases}
+$$
+
+```{r}
+x1 <- sqrt(x1)
+x4 <- 2 - x4
+```
+
+
+### Point Estimation
+
+```{r}
+y_hat <- predict(mlr, data.frame(X1 = x1, X2 = x2, X3 = x3, X4 = x4))
+```
+
+```{r}
+y_hat
+```
+```{r}
+exp(y_hat ^ (1/4))
+```
+
+
+We transform back
+
+$$
+\hat{y} = \exp\sqrt[4]{\hat{y}'}
+$$
+```{r}
+y_hat <- exp(y_hat ^ (1/4))
+```
+
+```{r}
+y_hat
+```
+
+### Interval Estimation
+
+Let's try to get the 95% interval
+
+```{r}
+alpha <- 0.05
+predict(mlr, data.frame(X1 = x1, X2 = x2, X3 = x3, X4 = x4), interval = "confidence", level = 1 - alpha)
+```
+
 
