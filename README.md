@@ -1,6 +1,6 @@
 # MH3510 Project
 
-**As we're approaching graduation, we'd really appreciate it if you gave this project a star ⭐ if you find it helpful! 🙏**
+**As we're approaching graduation, we'd really appreciate it if you gave this project a star if you find it helpful! 🙏**
 
 [Report](https://pufanyi.github.io/MH3510-Project/report/MH3510_Project.pdf) / [Code (html)](https://pufanyi.github.io/MH3510-Project/) / [Code (pdf)](https://pufanyi.github.io/MH3510-Project/index.pdf)
 
